@@ -22,8 +22,8 @@ jobs:
           TOMCAT_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/ | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -1 | tr -d 'v')
 
           # Update the shell script with the fetched values
-          sed -i "3 c MAJOR_VERSION=${MAJOR_VERSION}"  tomcat.sh
-          sed -i "4 c TOMCAT_VERSION=${TOMCAT_VERSION}" tomcat.sh
+          sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  tomcat.sh
+          sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" tomcat.sh
 
       - name: Commit updated Tomcat versions
         run: |
