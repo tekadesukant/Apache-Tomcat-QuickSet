@@ -1,7 +1,10 @@
 #!/bin/bash
 
+
+
+
+
 # Load Tomcat versions from environment file
-#!/bin/bash
 export MAJOR_VERSION=$(grep 'MAJOR_VERSION' tomcat_versions.env | cut -d '=' -f2)
 export TOMCAT_VERSION=$(grep 'TOMCAT_VERSION' tomcat_versions.env | cut -d '=' -f2)
 
