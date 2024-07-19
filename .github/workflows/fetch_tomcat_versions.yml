@@ -1,0 +1,34 @@
+name: Fetch Tomcat Versions
+
+on:
+  schedule:
+    - cron: '0 0 1 * *' # Runs at midnight on the 1st day of every month
+
+jobs:
+  fetch_tomcat_versions:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Fetch latest Tomcat versions
+        id: fetch_versions
+        run: |
+          # Fetch the latest Tomcat major version number
+          MAJOR_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/ | grep -oP 'tomcat-[0-9]+' | sort -V | tail -1 | grep -oP '[0-9]+')
+
+          # Fetch the latest Tomcat version number within the major version
+          TOMCAT_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/ | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -1 | tr -d 'v')
+
+          # Update the shell script with the fetched values
+          echo "MAJOR_VERSION=${MAJOR_VERSION}" > tomcat_versions.env
+          echo "TOMCAT_VERSION=${TOMCAT_VERSION}" >> tomcat_versions.env
+
+      - name: Commit updated Tomcat versions
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add tomcat_versions.env
+          git commit -m "Update Tomcat versions"
+          git push
