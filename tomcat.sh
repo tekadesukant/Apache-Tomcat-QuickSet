@@ -1,7 +1,8 @@
 #!/bin/bash
+# Install Java
+sudo amazon-linux-extras install java-openjdk11 -y
 
 TOMCAT_VERSION=11.0.0
-
 
 
 
@@ -10,8 +11,7 @@ TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/v${TOMCAT_VE
 
 echo "Fetching Tomcat version ${TOMCAT_VERSION} from ${TOMCAT_URL}"
 
-# Install Java
-sudo amazon-linux-extras install java-openjdk11 -y
+
 
 # Download and extract Tomcat
 wget $TOMCAT_URL
