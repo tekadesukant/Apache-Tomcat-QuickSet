@@ -1,1 +1,0 @@
-[![Fetch Tomcat Versions](https://github.com/tekadesukant/Tomcat-Automated-Installation/actions/workflows/fetch_tomcat_versions.yml/badge.svg)](https://github.com/tekadesukant/Tomcat-Automated-Installation/actions/workflows/fetch_tomcat_versions.yml)
