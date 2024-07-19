@@ -1,6 +1,6 @@
 #!/bin/bash
 
-
+TOMCAT_VERSION=11.0.0
 
 
 
