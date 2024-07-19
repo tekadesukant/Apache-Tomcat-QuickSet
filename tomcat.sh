@@ -4,10 +4,6 @@
 
 
 
-# Load Tomcat versions from environment file
-export MAJOR_VERSION=$(grep 'MAJOR_VERSION' tomcat_versions.env | cut -d '=' -f2)
-export TOMCAT_VERSION=$(grep 'TOMCAT_VERSION' tomcat_versions.env | cut -d '=' -f2)
-
 
 # Construct the download URL
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
