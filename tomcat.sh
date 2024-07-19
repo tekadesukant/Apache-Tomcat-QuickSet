@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install Java
-sudo amazon-linux-extras install java-openjdk11 -y
+amazon-linux-extras install java-openjdk11 -y
 
 MAJOR_VERSION=11
 TOMCAT_VERSION=11.0.0
