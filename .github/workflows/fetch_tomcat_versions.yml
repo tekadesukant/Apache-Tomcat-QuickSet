@@ -2,7 +2,7 @@ name: Fetch Tomcat Versions
 
 on:
   schedule:
-    - cron: '0 0 */10 * *' # Runs at midnight on every 10th day of previous job
+    - cron: '0 0 */10 * *' # Runs at midnight on every 10th day of the month
 
 jobs:
   fetch_tomcat_versions:
@@ -21,11 +21,28 @@ jobs:
           # Fetch the latest Tomcat version number within the major version
           TOMCAT_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/ | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -1 | tr -d 'v')
 
-          # Update the shell script with the fetched values
-          sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  tomcat.sh
-          sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" tomcat.sh
+          # Check if the version has changed
+          CURRENT_MAJOR_VERSION=$(grep -oP 'MAJOR_VERSION=\K[0-9]+' tomcat.sh)
+          CURRENT_TOMCAT_VERSION=$(grep -oP 'TOMCAT_VERSION=\K[0-9]+\.[0-9]+\.[0-9]+' tomcat.sh)
+
+          echo "Current Major Version: ${CURRENT_MAJOR_VERSION}"
+          echo "Fetched Major Version: ${MAJOR_VERSION}"
+          echo "Current Tomcat Version: ${CURRENT_TOMCAT_VERSION}"
+          echo "Fetched Tomcat Version: ${TOMCAT_VERSION}"
+
+          if [ "${CURRENT_MAJOR_VERSION}" != "${MAJOR_VERSION}" ] || [ "${CURRENT_TOMCAT_VERSION}" != "${TOMCAT_VERSION}" ]; then
+            echo "Versions differ, updating tomcat.sh..."
+            sed -i "s/^MAJOR_VERSION=.*$/MAJOR_VERSION=${MAJOR_VERSION}/" tomcat.sh
+            sed -i "s/^TOMCAT_VERSION=.*$/TOMCAT_VERSION=${TOMCAT_VERSION}/" tomcat.sh
+            echo "Versions updated."
+            echo "::set-output name=update_needed::true"
+          else
+            echo "No update needed."
+            echo "::set-output name=update_needed::false"
+          fi
 
       - name: Commit updated Tomcat versions
+        if: steps.fetch_version.outputs.update_needed == 'true'
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
