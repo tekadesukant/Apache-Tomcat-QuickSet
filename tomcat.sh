@@ -17,10 +17,13 @@ echo "Fetching Tomcat version ${TOMCAT_VERSION} from ${TOMCAT_URL}"
 wget $TOMCAT_URL
 tar -zxvf apache-tomcat-${TOMCAT_VERSION}.tar.gz
 
+read -p "Enter password for Tomcat user: " password
+echo
+
 # Configure Tomcat users
 sed -i '56  a\<role rolename="manager-gui"/>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
 sed -i '57  a\<role rolename="manager-script"/>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
-sed -i '58  a\<user username="apachetomcat" password="apachetomcat123" roles="manager-gui,manager-script"/>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
+sed -i '58  a\<user username="apachetomcat" password="'"$password"'" roles="manager-gui,manager-script"/>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
 sed -i '59  a\</tomcat-users>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
 sed -i '56d' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
 sed -i '21d' apache-tomcat-${TOMCAT_VERSION}/webapps/manager/META-INF/context.xml
