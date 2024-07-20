@@ -1,9 +1,9 @@
 <div id="header" align="center">
-  <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnFlbzJteHZpcGh3dTRiMGVvMWE2a3I0ZnhuNGI0dGJveDIzM3I5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/nYD66ng26rP1WMmXwx/giphy.gif" width="200"/>
+  <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYm5vaHRnaGpjbXl0M2V2ZGo4Y3E3ZDlua2tmaDZidHVyNTdyazY0NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/KzJkzjggfGN5Py6nkT/giphy.gif" width="200"/>
 </div>
 <h1 id="header" align="center">
-   &nbsp;&nbsp;<i></i><p><span class="bold">hey&nbsp;there&nbsp; </i>
-  <img src="https://media.giphy.com/media/hvRJCLFzcasrR4ia7z/giphy.gif" width="30px"/>
+   &nbsp;&nbsp;<i></i><p><span class="bold">Welcome aboard! Explore our relm&nbsp; </i>
+  <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="40px"/>
   </span</p>
 </h1>
 <div id="badges" align="center">
