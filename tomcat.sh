@@ -20,7 +20,7 @@ tar -zxvf apache-tomcat-${TOMCAT_VERSION}.tar.gz
 # Configure Tomcat users
 sed -i '56  a\<role rolename="manager-gui"/>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
 sed -i '57  a\<role rolename="manager-script"/>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
-sed -i '58  a\<user username="tomcat" password="raham123" roles="manager-gui,manager-script"/>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
+sed -i '58  a\<user username="tomcat" password="tomcat123" roles="manager-gui,manager-script"/>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
 sed -i '59  a\</tomcat-users>' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
 sed -i '56d' apache-tomcat-${TOMCAT_VERSION}/conf/tomcat-users.xml
 sed -i '21d' apache-tomcat-${TOMCAT_VERSION}/webapps/manager/META-INF/context.xml
