@@ -23,7 +23,6 @@ jobs:
           sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  tomcat.sh
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" tomcat.sh
 
-
       - name: Commit updated Tomcat versions
         run: |
           git config --local user.name "GitHub Actions"
