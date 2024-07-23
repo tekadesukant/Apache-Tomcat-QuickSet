@@ -21,25 +21,10 @@ jobs:
           # Fetch the latest Tomcat version number within the major version
           TOMCAT_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/ | grep -oP 'v\d+\.\d+\.\d+.*?/' | sort -V | tail -n 1 | sed 's/\/$//')
 
-          # Check if the version has changed
-          CURRENT_MAJOR_VERSION=$(grep -oP 'MAJOR_VERSION=\K[0-9]+' tomcat.sh)
-          CURRENT_TOMCAT_VERSION=$(grep -oP 'TOMCAT_VERSION=\K[0-9]+\.[0-9]+\.[0-9]+' tomcat.sh)
+          # Update the shell script with the fetched values
+          sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  tomcat.sh
+          sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" tomcat.sh
 
-          echo "Current Major Version: ${CURRENT_MAJOR_VERSION}"
-          echo "Fetched Major Version: ${MAJOR_VERSION}"
-          echo "Current Tomcat Version: ${CURRENT_TOMCAT_VERSION}"
-          echo "Fetched Tomcat Version: ${TOMCAT_VERSION}"
-
-          if [ "${CURRENT_MAJOR_VERSION}" != "${MAJOR_VERSION}" ] || [ "${CURRENT_TOMCAT_VERSION}" != "${TOMCAT_VERSION}" ]; then
-            echo "Versions differ, updating tomcat.sh..."
-            sed -i "s/^MAJOR_VERSION=.*$/MAJOR_VERSION=${MAJOR_VERSION}/" tomcat.sh
-            sed -i "s/^TOMCAT_VERSION=.*$/TOMCAT_VERSION=${TOMCAT_VERSION}/" tomcat.sh
-            echo "Versions updated."
-            echo "::set-output name=update_needed::true"
-          else
-            echo "No update needed."
-            echo "::set-output name=update_needed::false"
-          fi
 
       - name: Commit updated Tomcat versions
         if: steps.fetch_version.outputs.update_needed == 'true'
@@ -47,5 +32,10 @@ jobs:
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git add tomcat.sh
-          git commit -m "Update Tomcat.sh file"
-          git push
+          if ! git diff --cached --quiet; then
+            echo "Tomcat version differs, updating node_exporter.sh..."
+            git commit -m "Update Node_Exporter.sh file"
+            git push
+          else
+            echo "No changes detected, skipping commit."
+          fi
