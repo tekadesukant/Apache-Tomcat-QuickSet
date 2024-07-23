@@ -13,28 +13,25 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Fetch latest Tomcat versions
-        id: fetch_versions
         run: |
           # Fetch the latest Tomcat major version number
           MAJOR_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/ | grep -oP 'tomcat-[0-9]+' | sort -V | tail -1 | grep -oP '[0-9]+')
-
           # Fetch the latest Tomcat version number within the major version
           TOMCAT_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/ | grep -oP 'v\d+\.\d+\.\d+.*?/' | sort -V | tail -n 1 | sed 's/\/$//')
-
+          echo "Frtched Latest Tomcat Version $TOMCAT_VERSION"
           # Update the shell script with the fetched values
           sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  tomcat.sh
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" tomcat.sh
 
 
       - name: Commit updated Tomcat versions
-        if: steps.fetch_version.outputs.update_needed == 'true'
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
           git add tomcat.sh
           if ! git diff --cached --quiet; then
-            echo "Tomcat version differs, updating node_exporter.sh..."
-            git commit -m "Update Node_Exporter.sh file"
+            echo "Tomcat version differs, updating tomcat.sh..."
+            git commit -m "Update tomcat.sh file"
             git push
           else
             echo "No changes detected, skipping commit."
