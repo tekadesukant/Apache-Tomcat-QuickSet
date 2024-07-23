@@ -7,6 +7,7 @@ TOMCAT_VERSION=11.0.0
 
 # Construct the download URL
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/v${TOMCAT_VERSION}/bin/apache-tomcat-${TOMCAT_VERSION}.tar.gz"
+TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/v${TOMCAT_VERSION}-M22/bin/apache-tomcat-${TOMCAT_VERSION}-M22.tar.gz"
 
 echo "Fetching Tomcat version ${TOMCAT_VERSION} from ${TOMCAT_URL}"
 
