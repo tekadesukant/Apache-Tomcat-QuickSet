@@ -2,8 +2,8 @@
 # Install Java
 amazon-linux-extras install java-openjdk11 -y
 
-MAJOR_VERSION=
-TOMCAT_VERSION=
+MAJOR_VERSION=11
+TOMCAT_VERSION=11.0.0-M22
 
 # Construct the download URL
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz"
