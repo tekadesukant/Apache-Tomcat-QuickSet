@@ -2,7 +2,7 @@ name: Fetch Tomcat Versions
 
 on:
   schedule:
-    - cron: '0 0 */10 * *' # Runs at midnight on every 10th day of the month
+    - cron: '* * * * *' # Runs at midnight on every 10th day of the month
 
 jobs:
   fetch_tomcat_versions:
@@ -19,7 +19,7 @@ jobs:
           MAJOR_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/ | grep -oP 'tomcat-[0-9]+' | sort -V | tail -1 | grep -oP '[0-9]+')
 
           # Fetch the latest Tomcat version number within the major version
-          TOMCAT_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/ | grep -oP 'v[0-9]+\.[0-9]+\.[0-9]+' | sort -V | tail -1 | tr -d 'v')
+          TOMCAT_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/ | grep -oP 'v\d+\.\d+\.\d+.*?/' | sort -V | tail -n 1 | sed 's/\/$//')
 
           # Check if the version has changed
           CURRENT_MAJOR_VERSION=$(grep -oP 'MAJOR_VERSION=\K[0-9]+' tomcat.sh)
