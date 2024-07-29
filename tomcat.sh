@@ -15,21 +15,14 @@ log "Starting Tomcat installation script..."
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
-# Install Java if not already installed
-if ! java -version 2>&1 | grep -q "11"; then
-    log "Installing Java OpenJDK 11..."
-    amazon-linux-extras install java-openjdk11 -y
-else
-    log "Java OpenJDK 11 is already installed."
-fi
-
 # Check if Tomcat is already installed
 if [ -d "/opt/apache-tomcat-$TOMCAT_VERSION" ]; then
     log "Tomcat version $TOMCAT_VERSION is already installed."
     exit 0
 fi
 
-# Download and install Java 17
+# Download and install Java 17 and java 11
+amazon-linux-extras install java-openjdk11 -y
 log "Downloading and installing Java 17..."
 wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
 tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
