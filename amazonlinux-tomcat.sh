@@ -78,13 +78,23 @@ sudo tee /usr/local/sbin/tomcat << 'EOF'
 
 case "$1" in
     -up)
+        echo "Starting Tomcat..."
         sudo -u root /opt/tomcat/bin/startup.sh
         ;;
     -down)
+        echo "Stopping Tomcat..."
         sudo -u root /opt/tomcat/bin/shutdown.sh
         ;;
+    -restart)
+        echo "Restarting Tomcat..."
+        echo "Stopping Tomcat..."
+        sudo -u root /opt/tomcat/bin/shutdown.sh
+        sleep 5  # Wait for Tomcat to stop completely
+        echo "Starting Tomcat..."
+        sudo -u root /opt/tomcat/bin/startup.sh
+        ;;
     *)
-        echo "Usage: tomcat {-up|-down}"
+        echo "Usage: tomcat {-up|-down|-restart}"
         ;;
 esac
 EOF
@@ -103,6 +113,7 @@ echo "tomcat path: /opt/tomcat" >> tomcatcreds.txt
 echo "port number: publicip:8080" >> tomcatcreds.txt
 echo "COMM TO RUN TOMCAT:sudo tomcat -up" >> tomcatcreds.txt 
 echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> tomcatcreds.txt 
+echo "COMM TO RESTSRT TOMCAT:sudo tomcat -restart" >> tomcatcreds.txt 
 
 # Clean up
 log "Cleaning up..."
