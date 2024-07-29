@@ -2,8 +2,8 @@
 # Define log file
 LOG_FILE="/var/log/tomcat_installation.log"
 
-MAJOR_VERSION=
-TOMCAT_VERSION=
+MAJOR_VERSION=11
+TOMCAT_VERSION=11.0.0-M22
 
 # Function to log messages with timestamps
 log() {
