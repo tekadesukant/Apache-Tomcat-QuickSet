@@ -107,13 +107,13 @@ source ~/.bashrc
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
-echo "username: apachetomcat" > tomcatcreds.txt
-echo "password: $password" >> tomcatcreds.txt
-echo "tomcat path: /opt/tomcat" >> tomcatcreds.txt
-echo "port number: publicip:8080" >> tomcatcreds.txt
-echo "COMM TO RUN TOMCAT:sudo tomcat -up" >> tomcatcreds.txt 
-echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> tomcatcreds.txt 
-echo "COMM TO RESTSRT TOMCAT:sudo tomcat -restart" >> tomcatcreds.txt 
+echo "username: apachetomcat" > /opt/tomcatcreds.txt
+echo "password: $password" >> /opt/tomcatcreds.txt
+echo "tomcat path: /opt/tomcat" >> /opt/tomcatcreds.txt
+echo "port number: publicip:8080" >> /opt/tomcatcreds.txt
+echo "COMM TO RUN TOMCAT:sudo tomcat -up" >> /opt/tomcatcreds.txt 
+echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> /opt/tomcatcreds.txt 
+echo "COMM TO RESTSRT TOMCAT:sudo tomcat -restart" >> /opt/tomcatcreds.txt 
 
 # Clean up
 log "Cleaning up..."
