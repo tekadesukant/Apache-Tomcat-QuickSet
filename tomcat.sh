@@ -30,5 +30,8 @@ sed -i '22d' apache-tomcat-$TOMCAT_VERSION/webapps/manager/META-INF/context.xml
 # Start Tomcat
 sh apache-tomcat-$TOMCAT_VERSION/bin/startup.sh
 
-cat tomcatcreds.txt > username: apachetomcat
-cat tomcatcreds.txt >> password: $password
+ 
+touch tomcatcreds.txt
+echo "username: apachetomcat" > tomcatcreds.txt
+echo "password: $password" >> tomcatcreds.txt
+
