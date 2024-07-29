@@ -17,7 +17,7 @@ log "Starting Tomcat installation script..."
 set -e  # Exit immediately if a command exits with a non-zero status
 
 # Check if Tomcat is already installed
-if [ -d "/opt/apache-tomcat-$TOMCAT_VERSION" ]; then
+if [ -d "/opt/tomcat" ]; then
     log "Tomcat version $TOMCAT_VERSION is already installed."
     exit 0
 fi
@@ -41,33 +41,67 @@ log "Downloading Tomcat..."
 wget $TOMCAT_URL
 tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
 
+mv apache-tomcat-$TOMCAT_VERSION tomcat
+
 # Move Tomcat to /opt and set permissions
 log "Moving Tomcat to /opt and setting permissions..."
-sudo mv apache-tomcat-$TOMCAT_VERSION /opt/
-sudo chown -R $USER:$USER /opt/apache-tomcat-$TOMCAT_VERSION
+sudo mv tomcat /opt/
+sudo chown -R $USER:$USER /opt/tomcat
+
+password=tomcat123
 
 # Configure Tomcat users
-TOMCAT_USER_CONFIG="/opt/apache-tomcat-$TOMCAT_VERSION/conf/tomcat-users.xml"
+TOMCAT_USER_CONFIG="/opt/tomcat/conf/tomcat-users.xml"
 log "Configuring Tomcat users..."
 sudo sed -i '56  a\<role rolename="manager-gui"/>' $TOMCAT_USER_CONFIG
 sudo sed -i '57  a\<role rolename="manager-script"/>' $TOMCAT_USER_CONFIG
-sudo sed -i '58  a\<user username="apachetomcat" password="tomcat123" roles="manager-gui,manager-script"/>' $TOMCAT_USER_CONFIG
+sudo sed -i '58  a\<user username="apachetomcat" password="'"$password"'" roles="manager-gui,manager-script"/>' $TOMCAT_USER_CONFIG
 sudo sed -i '59  a\</tomcat-users>' $TOMCAT_USER_CONFIG
 sudo sed -i '56d' $TOMCAT_USER_CONFIG
-sudo sed -i '21d' /opt/apache-tomcat-$TOMCAT_VERSION/webapps/manager/META-INF/context.xml
-sudo sed -i '22d' /opt/apache-tomcat-$TOMCAT_VERSION/webapps/manager/META-INF/context.xml
+sudo sed -i '21d' /opt/tomcat/webapps/manager/META-INF/context.xml
+sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
 
 # Start Tomcat
 log "Starting Tomcat..."
-/opt/apache-tomcat-$TOMCAT_VERSION/bin/startup.sh
+/opt/tomcat/bin/startup.sh
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
 echo "username: apachetomcat" > tomcatcreds.txt
 echo "password: $password" >> tomcatcreds.txt
+echo "tomcat path: /opt/tomcat" >> tomcatcreds.txt
+echo "port number: publicip:8080" >> tomcatcreds.txt
+echo "COMM TO RUN TOMCAT:sudo tomcat -up" >> tomcatcreds.txt 
+echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> tomcatcreds.txt 
 
 # Clean up
 log "Cleaning up..."
 rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
 
+# Create the tomcat script
+sudo tee /usr/local/sbin/tomcat << 'EOF'
+#!/bin/bash
+
+case "$1" in
+    -up)
+        sudo -u root /opt/tomcat/bin/startup.sh
+        ;;
+    -down)
+        sudo -u root /opt/tomcat/bin/shutdown.sh
+        ;;
+    *)
+        echo "Usage: tomcat {-up|-down}"
+        ;;
+esac
+EOF
+
+# Make the tomcat script executable
+sudo chmod +x /usr/local/sbin/tomcat
+
+# Add an alias to the .bashrc file
+echo "alias tomcat='/usr/local/sbin/tomcat'" >> ~/.bashrc
 log "Tomcat installation and configuration complete."
+# Reload the .bashrc file
+exec bash
+sleep 5
+
