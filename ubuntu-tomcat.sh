@@ -73,6 +73,7 @@ echo "tomcat path: /opt/tomcat" >> tomcatcreds.txt
 echo "port number: publicip:8080" >> tomcatcreds.txt
 echo "COMM TO RUN TOMCAT:sudo tomcat -up" >> tomcatcreds.txt 
 echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> tomcatcreds.txt 
+echo "COMM TO RESTART TOMCAT:sudo tomcat -restart" >> tomcatcreds.txt 
 
 # Clean up
 log "Cleaning up..."
