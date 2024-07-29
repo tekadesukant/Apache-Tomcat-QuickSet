@@ -107,6 +107,6 @@ echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> tomcatcreds.txt
 # Clean up
 log "Cleaning up..."
 rm -f openjdk-17.0.2_linux-x64_bin.tar.gz
-rm -f tomcat.tar.gz
+rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
 
 log "Tomcat installation and configuration complete."
