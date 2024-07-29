@@ -2,7 +2,7 @@ name: Fetch Tomcat Versions
 
 on:
   schedule:
-    - cron: '0 0 */10 * *' # Runs at midnight on every 10th day of the month
+    - cron: '* * * * *' # Runs at midnight on every 10th  day of the month
 
 jobs:
   fetch_tomcat_versions:
@@ -19,14 +19,17 @@ jobs:
           echo "Latest Tomcat Version: ${LATEST_VERSION}"
           TOMCAT_VERSION=$(echo "${LATEST_VERSION}" | cut -c 2-)
           # Update the shell script with the fetched values
-          sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  tomcat.sh
-          sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" tomcat.sh
+          sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  amazonlinux-tomcat.sh
+          sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" amazonlinux-tomcat.sh
+          sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  ubuntu-tomcat.sh
+          sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" ubuntu-tomcat.sh
 
       - name: Commit updated Tomcat versions
         run: |
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
-          git add tomcat.sh
+          git add amazonlinux-tomcat.sh 
+          git add ubuntu-tomcat.sh 
           if ! git diff --cached --quiet; then
             echo "Tomcat version differs, updating tomcat.sh..."
             git commit -m "Update tomcat.sh file"
