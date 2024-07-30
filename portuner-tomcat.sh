@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# TESTED SUCCESFULLY FOR UBUNTU INSTANCE
 # Prompt the user to enter a new port number
 echo "Enter new port number (1024-65535): "
 read CUSTOM_TOMCAT_PORT
