@@ -108,6 +108,6 @@ We've integrated convenient commands to manage Tomcat:
 
 ## Support
 
-If you encounter any issues or have questions, feel free to open an issue on our [GitHub repository](https://github.com/tekadesukant/Apache-Tomcat-QuickSet) or reach out to our support team.
+If you encounter any issues or have questions, feel free to open an issue on our [GitHub repository](https://github.com/tekadesukant/Apache-Tomcat-QuickSet) or reach out to me.
 
 Happy coding! 🚀
