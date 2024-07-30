@@ -77,8 +77,8 @@ Our scripts support the following environments on AWS:
    sh amazonlinux-tomcat.sh  # For Amazon Linux
    sh ubuntu-tomcat.sh       # For Ubuntu
    sh remove-tomcat.sh       # To remove Tomcat
-   sh passwizard-tomcat.sh  # To change password
-   sh portuner-tomcat.sh    # To change port number
+   sh passwizard-tomcat.sh   # To change password
+   sh portuner-tomcat.sh     # To change port number
    ```
 
 ## Integrated Commands
