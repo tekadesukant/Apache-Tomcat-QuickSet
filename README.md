@@ -1,11 +1,9 @@
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&text=Apache-Tomcat!&height=90&section=header"/>
-</p>
-<h6>&nbsp;</h6>
 
-<div id="header" align="center">
+
+<div align="center">
   <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYm5vaHRnaGpjbXl0M2V2ZGo4Y3E3ZDlua2tmaDZidHVyNTdyazY0NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/KzJkzjggfGN5Py6nkT/giphy.gif" width="200"/>
-</div>
+</div>  <!-- another gif : "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExYnFlbzJteHZpcGh3dTRiMGVvMWE2a3I0ZnhuNGI0dGJveDIzM3I5ayZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/nYD66ng26rP1WMmXwx/giphy.gif" -->
+<h1  align="center">
 <h1 id="header" align="center">
    &nbsp;&nbsp;<i></i><p><span class="bold">Welcome aboard! Explore our relm&nbsp; </i>
   <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="40px"/>
@@ -83,8 +81,4 @@ If you encounter any issues or have questions, feel free to open an issue on our
 
 Happy coding! 🚀
 
-
-<p align="center">
-  <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=100&section=footer"/>
-</p>
 
