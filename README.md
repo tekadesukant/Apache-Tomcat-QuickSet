@@ -42,7 +42,7 @@ Welcome to **Tomcat AutoSetup**, your go-to solution for effortlessly installing
 ## What's Inside?
 
 - **Automated Script**: A robust script that handles the complete installation and setup of Tomcat. Simply execute it and watch your server come to life! 🛠️
-- **Weekly Updates**: The script is updated weekly. A job fetches the latest Tomcat version and updates the `tomcat.sh` file for you. 🌟
+- **Weekly Updates**: The script is updated weekly. A job fetches the latest Tomcat version and updates the `amazonlinux-tomcat.sh` and `ubuntu-tomcat.sh` file for you. 🌟
 - **User-Friendly**: Say goodbye to manual setups. Our script ensures a smooth and quick installation process. ⏱️
 - **Ready for Action**: Get straight to coding and deployment with Tomcat fully configured and ready to use! 💻
 
