@@ -21,6 +21,7 @@ jobs:
           # Update the shell script with the fetched values
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" amazonlinux-tomcat.sh
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" ubuntu-tomcat.sh
+          sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" apache-tomcat.sh
 
       - name: Commit updated Tomcat versions
         run: |
@@ -28,9 +29,10 @@ jobs:
           git config --local user.email "actions@github.com"
           git add amazonlinux-tomcat.sh 
           git add ubuntu-tomcat.sh 
+          git add apache-tomcat.sh
           if ! git diff --cached --quiet; then
-            echo "Tomcat version differs, updating tomcat.sh..."
-            git commit -m "Update tomcat.sh file"
+            echo "Tomcat version differs, updating 3 tomcat files..."
+            git commit -m "Update version"
             git push
           else
             echo "No changes detected, skipping commit."
