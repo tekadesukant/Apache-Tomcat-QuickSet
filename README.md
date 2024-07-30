@@ -50,12 +50,13 @@ Welcome to **Apache-Tomcat-QuickSet**, your go-to solution for effortlessly inst
 
 Our scripts support the following environments on AWS:
 
+- **Ubuntu & Amazon Linux**:
+  - `apache-tomcat.sh`: Installs Tomcat on both Platforms Amazon Linux and Ubuntu.
 - **Amazon Linux**:
   - `amazonlinux-tomcat.sh`: Installs Tomcat on an Amazon Linux 2 AMI (HVM).
 - **Ubuntu**:
   - `ubuntu-tomcat.sh`: Installs Tomcat on an Ubuntu server 22.04 LTS (HVM).
-- **Ubuntu & Amazon Linux**
-  - `apache-tomcat.sh`: Installs Tomcat on both Platforms.
+
 
 ## Additional Scripts
 
@@ -77,6 +78,7 @@ Our scripts support the following environments on AWS:
 2. **Run the desired script:**
    ```bash
    sh amazonlinux-tomcat.sh  # For Amazon Linux
+   sh apache-tomcat.sh       # For Amazon Linux and Ubuntu
    sh ubuntu-tomcat.sh       # For Ubuntu
    sh remove-tomcat.sh       # To remove Tomcat
    sh passwizard-tomcat.sh   # To change password
