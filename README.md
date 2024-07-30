@@ -51,9 +51,9 @@ Welcome to **Tomcat AutoSetup**, your go-to solution for effortlessly installing
 Our scripts support the following environments on AWS:
 
 - **Amazon Linux**:
-  - `amazonlinux-tomcat.sh`: Installs Tomcat on an Amazon Linux instance.
+  - `amazonlinux-tomcat.sh`: Installs Tomcat on an Amazon Linux 2 AMI (HVM).
 - **Ubuntu**:
-  - `ubuntu-tomcat.sh`: Installs Tomcat on an Ubuntu instance.
+  - `ubuntu-tomcat.sh`: Installs Tomcat on an Ubuntu server 22.04 LTS (HVM).
 
 ## Additional Scripts
 
@@ -87,19 +87,34 @@ We've integrated convenient commands to manage Tomcat:
 
 - **Start Tomcat:**
   ```bash
-  tomcat -up
+  tomcat --up
   ```
 
 - **Stop Tomcat:**
   ```bash
-  tomcat -down
+  tomcat --down
   ```
 
 - **Restart Tomcat:**
   ```bash
-  tomcat -restart
+  tomcat --restart
   ```
 
+- **Remove Tomcat:**
+  ```bash
+  tomcat --delete
+  ```
+  
+- **Change Tomcat Port Number:**
+  ```bash
+  tomcat --port-change
+  ```
+
+- **Change Tomcat Password:**
+  ```bash
+  tomcat --passwd-change
+  ```
+  
 ## Features
 
 - **User-Friendly**: Our scripts prompt for necessary input values, making them easy to use and customize.
