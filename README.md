@@ -54,6 +54,8 @@ Our scripts support the following environments on AWS:
   - `amazonlinux-tomcat.sh`: Installs Tomcat on an Amazon Linux 2 AMI (HVM).
 - **Ubuntu**:
   - `ubuntu-tomcat.sh`: Installs Tomcat on an Ubuntu server 22.04 LTS (HVM).
+- **Ubuntu & Amazon Linux**
+  - `apache-tomcat.sh`: Installs Tomcat on both Platforms.
 
 ## Additional Scripts
 
