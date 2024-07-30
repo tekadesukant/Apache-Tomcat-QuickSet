@@ -21,7 +21,6 @@ jobs:
           # Update the shell script with the fetched values
           sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  amazonlinux-tomcat.sh
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" amazonlinux-tomcat.sh
-          sed -i "5 c MAJOR_VERSION=${MAJOR_VERSION}"  ubuntu-tomcat.sh
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" ubuntu-tomcat.sh
 
       - name: Commit updated Tomcat versions
