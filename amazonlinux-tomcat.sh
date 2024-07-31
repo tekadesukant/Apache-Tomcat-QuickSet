@@ -1,12 +1,16 @@
 #!/bin/bash
-# Define log file
-LOG_FILE="/var/log/tomcat_installation.log"
 
-# Fetched latest version 
+# Note: 
+
+# Latest version successfully fetched 
 TOMCAT_VERSION=11.0.0-M22
 # Previous Versions : 9.0.91, 10.1.26
 
+# Extracting major version from fetched version
 MAJOR_VERSION=$(echo "$TOMCAT_VERSION" | cut -d'.' -f1)
+
+# Define log file
+LOG_FILE="/var/log/tomcat_installation.log"
 
 # Function to log messages with timestamps
 log() {
@@ -18,12 +22,6 @@ log "Starting Tomcat installation script..."
 
 set -e  # Exit immediately if a command exits with a non-zero status
 
-# Check if Tomcat is already installed
-if [ -d "/opt/apache-tomcat-$TOMCAT_VERSION" ]; then
-    log "Tomcat version $TOMCAT_VERSION is already installed."
-    exit 0
-fi
-
 # Download and install Java 11 and java 17
 log "Downloading and installing Java Devleopment Kit..."
 amazon-linux-extras install java-openjdk11 -y
@@ -34,10 +32,8 @@ sudo tee /etc/profile.d/jdk.sh <<EOF
 export JAVA_HOME=/opt/jdk-17
 export PATH=\$PATH:\$JAVA_HOME/bin
 EOF
-
-# Source the profile script to set JAVA_HOME
 source /etc/profile.d/jdk.sh
-log "Java Installed Successfully."
+log "Java Development Kit Installed Successfully."
  
 # Construct the download URL for Tomcat
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz"
@@ -56,9 +52,8 @@ log "Moving Tomcat to /opt and setting permissions..."
 sudo mv tomcat /opt/
 sudo chown -R $(whoami):$(whoami) /opt/tomcat
 
-password=tomcat123
-
 # Configure Tomcat users
+password=tomcat123
 TOMCAT_USER_CONFIG="/opt/tomcat/conf/tomcat-users.xml"
 log "Configuring Tomcat users..."
 sudo sed -i '56  a\<role rolename="manager-gui"/>' $TOMCAT_USER_CONFIG
@@ -73,9 +68,10 @@ sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
 log "Starting Tomcat..."
 /opt/tomcat/bin/startup.sh
 
+# Creating and Integrating tomcat commands script
 sudo tee /opt/portuner.sh <<'EOF'
 #!/bin/bash
-# TESTED SUCCESFULLY FOR UBUNTU INSTANCE
+# Note : This Script Tested Succesfully on UBUNTU INSTANCE
 # Prompt the user to enter a new port number
 echo "Enter new port number (1024-65535): "
 read CUSTOM_TOMCAT_PORT
@@ -125,7 +121,9 @@ sudo /opt/tomcat/bin/shutdown.sh
 sleep 10
 sudo rm -r /opt/tomcat/
 sudo rm -r /usr/local/sbin/tomcat
-sudo rm -f /opt/tomcatcreds.txt
+sudo rm -f /opt/tomcreds.txt
+sudo rm -f /opt/portuner.sh
+sudo rm -f /opt/passwd.sh
 echo "Tomcat removed successfully"
 EOF
 
@@ -177,16 +175,22 @@ source ~/.bashrc
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
-echo "username: apachetomcat" > /opt/tomcatcreds.txt
-echo "password: $password" >> /opt/tomcatcreds.txt
-echo "tomcat path: /opt/tomcat" >> /opt/tomcatcreds.txt
-echo "port number: publicip:8080" >> /opt/tomcatcreds.txt
-echo "COMM TO RUN TOMCAT:sudo tomcat -up" >> /opt/tomcatcreds.txt 
-echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> /opt/tomcatcreds.txt 
-echo "COMM TO RESTSRT TOMCAT:sudo tomcat -restart" >> /opt/tomcatcreds.txt 
-echo "COMM TO REMOVE TOMCAT:sudo tomcat -remove" >> /opt/tomcatcreds.txt 
-echo "COMM TO CHANGE PASSWORD TOMCAT:sudo tomcat -passwd" >> /opt/tomcatcreds.txt
-echo "COMM TO CHANGE PORT NUMBER TOMCAT:sudo tomcat -portuner" >> /opt/tomcatcreds.txt 
+sudo tee /opt/tomcatcreds.txt > /dev/null <<EOF
+username:apachetomcat
+password:tomcat123
+tomcat path:/opt/tomcat
+port number:8080
+
+< Integrated Tomcat Commands For You >
+- RUN TOMCAT: sudo tomcat --up
+- STOP TOMCAT: sudo tomcat --down
+- RESTART TOMCAT: sudo tomcat --restart
+- REMOVE TOMCAT: sudo tomcat --delete
+- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
+- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+
+Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
+EOF
 
 # Clean up
 log "Cleaning up..."
