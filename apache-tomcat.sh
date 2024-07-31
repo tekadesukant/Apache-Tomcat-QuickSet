@@ -34,7 +34,28 @@ log "Downloading Tomcat..."
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz"
 wget $TOMCAT_URL
 
-sudo tee /opt/portuner.sh <<'EOF'
+tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
+mv apache-tomcat-$TOMCAT_VERSION tomcat
+
+# Move Tomcat to /opt and set permissions
+log "Moving Tomcat to /opt and setting permissions..."
+sudo mv tomcat /opt/
+sudo chown -R $USER:$USER /opt/tomcat
+
+password=tomcat123
+
+# Configure Tomcat users
+TOMCAT_USER_CONFIG="/opt/tomcat/conf/tomcat-users.xml"
+log "Configuring Tomcat users..."
+sudo sed -i '56  a\<role rolename="manager-gui"/>' $TOMCAT_USER_CONFIG
+sudo sed -i '57  a\<role rolename="manager-script"/>' $TOMCAT_USER_CONFIG
+sudo sed -i '58  a\<user username="apachetomcat" password="'"$password"'" roles="manager-gui,manager-script"/>' $TOMCAT_USER_CONFIG
+sudo sed -i '59  a\</tomcat-users>' $TOMCAT_USER_CONFIG
+sudo sed -i '56d' $TOMCAT_USER_CONFIG
+sudo sed -i '21d' /opt/tomcat/webapps/manager/META-INF/context.xml
+sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
+
+sudo tee /opt/tomcat/portuner.sh <<'EOF'
 #!/bin/bash
 # TESTED SUCCESFULLY FOR UBUNTU INSTANCE
 # Prompt the user to enter a new port number
@@ -57,9 +78,9 @@ else
 fi
 EOF
 
-sudo chmod +x /opt/portuner.sh
+sudo chmod +x /opt/tomcat/portuner.sh
 
-sudo tee /opt/passwd.sh <<'EOF'
+sudo tee /opt/tomcat/passwd.sh <<'EOF'
 #!/bin/bash
 
 # Prompt the user to enter a new password
@@ -78,9 +99,9 @@ echo "Password successfully updated."
 sudo tomcat -restart
 EOF
 
-sudo chmod +x /opt/passwd.sh
+sudo chmod +x /opt/tomcat/passwd.sh
 
-sudo tee /opt/remove.sh <<'EOF'
+sudo tee /opt/tomcat/remove.sh <<'EOF'
 #!/bin/bash
 sudo /opt/tomcat/bin/shutdown.sh
 sleep 10
@@ -90,28 +111,7 @@ sudo rm -f /opt/tomcatcreds.txt
 echo "Tomcat removed successfully"
 EOF
 
-sudo chmod +x /opt/remove.sh
-
-tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
-mv apache-tomcat-$TOMCAT_VERSION tomcat
-
-# Move Tomcat to /opt and set permissions
-log "Moving Tomcat to /opt and setting permissions..."
-sudo mv tomcat /opt/
-sudo chown -R $USER:$USER /opt/tomcat
-
-password=tomcat123
-
-# Configure Tomcat users
-TOMCAT_USER_CONFIG="/opt/tomcat/conf/tomcat-users.xml"
-log "Configuring Tomcat users..."
-sudo sed -i '56  a\<role rolename="manager-gui"/>' $TOMCAT_USER_CONFIG
-sudo sed -i '57  a\<role rolename="manager-script"/>' $TOMCAT_USER_CONFIG
-sudo sed -i '58  a\<user username="apachetomcat" password="'"$password"'" roles="manager-gui,manager-script"/>' $TOMCAT_USER_CONFIG
-sudo sed -i '59  a\</tomcat-users>' $TOMCAT_USER_CONFIG
-sudo sed -i '56d' $TOMCAT_USER_CONFIG
-sudo sed -i '21d' /opt/tomcat/webapps/manager/META-INF/context.xml
-sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
+sudo chmod +x /opt/tomcat/remove.sh
 
 # Create the tomcat script
 sudo tee /usr/local/sbin/tomcat << 'EOF'
@@ -136,13 +136,13 @@ case "$1" in
         ;;
     --delete)
         echo "Removing Tomcat..."
-        sudo -u root /opt/remove.sh
+        sudo -u root /opt/tomcat/remove.sh
         ;;
     --port-change)
-        sudo -u root /opt/portuner.sh
+        sudo -u root /opt/tomcat/portuner.sh
         ;;
     --passwd-change)
-        sudo -u root /opt/passwd.sh
+        sudo -u root /opt/tomcat/passwd.sh
         ;;
     *)
         echo "Usage: tomcat {--up|--down|--restart|--delete|--port-change|--passwd-change}"
@@ -166,9 +166,8 @@ if [ "$OS" = "amazon" ]; then
     export JAVA_HOME=/opt/jdk-17
     export PATH=\$PATH:\$JAVA_HOME/bin
 EOF
-
-# Source the profile script to set JAVA_HOME
-source /etc/profile.d/jdk.sh
+    # Source the profile script to set JAVA_HOME
+    source /etc/profile.d/jdk.sh
     log "Java 17 installed."
 elif [ "$OS" = "ubuntu" ]; then
     log "Ubuntu detected. Updating package lists and installing Java 17..."
@@ -195,16 +194,20 @@ log "Starting Tomcat..."
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
 sudo tee /opt/tomcatcreds.txt > /dev/null <<EOF
-username: apachetomcat
-password: tomcat123
-tomcat path: /opt/tomcat
-port number: 8080
-COMM TO RUN TOMCAT: sudo tomcat --up
-COMM TO STOP TOMCAT: sudo tomcat --down
-COMM TO RESTART TOMCAT: sudo tomcat --restart
-COMM TO REMOVE TOMCAT: sudo tomcat --delete
-COMM TO CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
-COMM TO CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+username:apachetomcat
+password:tomcat123
+tomcat path:/opt/tomcat
+port number:8080
+
+< Integrated Tomcat Commands For You >
+- RUN TOMCAT: sudo tomcat --up
+- STOP TOMCAT: sudo tomcat --down
+- RESTART TOMCAT: sudo tomcat --restart
+- REMOVE TOMCAT: sudo tomcat --delete
+- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
+- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+
+Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
 EOF
 
 # Clean up
