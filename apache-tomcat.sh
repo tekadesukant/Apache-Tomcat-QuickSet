@@ -46,9 +46,8 @@ log "Moving Tomcat to /opt and setting permissions..."
 sudo mv tomcat /opt/
 sudo chown -R $USER:$USER /opt/tomcat
 
-password=tomcat123
-
 # Configure Tomcat users
+password=tomcat123
 TOMCAT_USER_CONFIG="/opt/tomcat/conf/tomcat-users.xml"
 log "Configuring Tomcat users..."
 sudo sed -i '56  a\<role rolename="manager-gui"/>' $TOMCAT_USER_CONFIG
