@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Note: 
+# Note: This script has been tested on an Amazon Linux 2 AMI (HVM).
 
 # Latest version successfully fetched 
 TOMCAT_VERSION=11.0.0-M22
@@ -23,18 +23,20 @@ log "Starting Tomcat installation script..."
 set -e  # Exit immediately if a command exits with a non-zero status
 
 # Download and install Java 11 and java 17
-log "Downloading and installing Java Devleopment Kit..."
+log "Installing Java Development Kit..."
+# Install Java 11
 amazon-linux-extras install java-openjdk11 -y
-wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
-tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
-sudo mv jdk-17.0.2/ /opt/jdk-17
-sudo tee /etc/profile.d/jdk.sh <<EOF
+# Install Java 17
+sudo wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
+sudo tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
+sudo mv jdk-17.0.2 /opt/jdk-17
+sudo tee /etc/profile.d/jdk.sh > /dev/null <<EOF
 export JAVA_HOME=/opt/jdk-17
 export PATH=\$PATH:\$JAVA_HOME/bin
 EOF
 source /etc/profile.d/jdk.sh
-log "Java Development Kit Installed Successfully."
- 
+log "Installed Java Development Kit Successfully." 
+
 # Construct the download URL for Tomcat
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz"
 
@@ -71,7 +73,7 @@ log "Starting Tomcat..."
 # Creating and Integrating tomcat commands script
 sudo tee /opt/portuner.sh <<'EOF'
 #!/bin/bash
-# Note : This Script Tested Succesfully on UBUNTU INSTANCE
+# Note: 
 # Prompt the user to enter a new port number
 echo "Enter new port number (1024-65535): "
 read CUSTOM_TOMCAT_PORT
@@ -83,20 +85,19 @@ sudo sed -i 's/port="8080"/port="'"$CUSTOM_TOMCAT_PORT"'"/' /opt/tomcat/conf/ser
 sudo sed -i '4 c portnumber="'"$CUSTOM_TOMCAT_PORT"'"' /opt/tomcatcreds.txt
 
 echo "Port number successfully updated to "'"$CUSTOM_TOMCAT_PORT"'". "
+#echo "Please restart Tomcat (comm: tomcat --restart) to apply changes."
 
-# Optionally, check Tomcat service status
-if systemctl is-active --quiet tomcat; then
-    echo "Tomcat is currently running. Please restart Tomcat (comm: tomcat -restart) to apply changes."
-else
-    echo "Tomcat is not running. You can start Tomcat (comm: tomcat -start) to apply the new port number."
-fi
+#restart Tomcat to apply the new port number
+echo "Restarting tomcat to apply the new port..."
+sudo tomcat --restart
+echo "Tomcat restarted succesfully"
 EOF
 
 sudo chmod +x /opt/portuner.sh
 
 sudo tee /opt/passwd.sh <<'EOF'
 #!/bin/bash
-
+# Note: 
 # Prompt the user to enter a new password
 echo "Enter new Tomcat manager password (minimum 6 characters): "
 read CUSTOM_TOMCAT_PASSWD
@@ -108,9 +109,12 @@ sudo sed -i '58  c <user username="apachetomcat" password="'"$CUSTOM_TOMCAT_PASS
 sudo sed -i '2 c password="'"$CUSTOM_TOMCAT_PASSWD"'"' /opt/tomcatcreds.txt
 
 echo "Password successfully updated."
+#echo "Please restart Tomcat (comm: tomcat --restart) to apply changes."
 
-# Optionally restart Tomcat to apply the new password
-sudo tomcat -restart
+#restart Tomcat to apply the new password
+echo "Restarting tomcat to apply the new password..."
+sudo tomcat --restart
+echo "Tomcat restarted succesfully"
 EOF
 
 sudo chmod +x /opt/passwd.sh
@@ -194,8 +198,11 @@ EOF
 
 # Clean up
 log "Cleaning up..."
-rm -f openjdk-17.0.2_linux-x64_bin.tar.gz
 rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
+rm -f openjdk-17.0.2_linux-x64_bin.tar.gz
+
+# Tomcat installation and configuration final touch up 
 log "Tomcat Assest"
-cat /opt/tomcatcreds.txt 
+cat /opt/tomcreds.txt
 log "Tomcat installation and configuration complete."
+exec bash 
