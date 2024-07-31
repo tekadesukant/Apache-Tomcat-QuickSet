@@ -46,7 +46,6 @@ log "Fetching Tomcat version $TOMCAT_VERSION from $TOMCAT_URL"
 log "Downloading Tomcat..."
 wget $TOMCAT_URL
 tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
-
 mv apache-tomcat-$TOMCAT_VERSION tomcat
 
 # Move Tomcat to /opt and set permissions
