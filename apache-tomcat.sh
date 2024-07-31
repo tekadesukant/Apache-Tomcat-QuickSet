@@ -164,30 +164,6 @@ EOF
 
 sudo chmod +x /opt/remove.sh
 
-# Save Tomcat credentials
-log "Saving Tomcat credentials..."
-sudo tee /opt/tomcreds.txt > /dev/null <<EOF
-username:apachetomcat
-password:tomcat123
-tomcat path:/opt/tomcat
-port number:8080
-
-< Integrated Tomcat Commands For You >
-- RUN TOMCAT: sudo tomcat --up
-- STOP TOMCAT: sudo tomcat --down
-- RESTART TOMCAT: sudo tomcat --restart
-- REMOVE TOMCAT: sudo tomcat --delete
-- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
-- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
-
-Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
-EOF
-
-# Clean up
-log "Cleaning up..."
-rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
-rm -f openjdk-17.0.2_linux-x64_bin.tar.gz
-
 # Create the tomcat script
 sudo tee /usr/local/sbin/tomcat << 'EOF'
 #!/bin/bash
@@ -238,7 +214,32 @@ elif [ "$OS" = "ubuntu" ]; then
     . ~/.bashrc
 if
 
-log " Tomcat Assest"
+# Save Tomcat credentials
+log "Saving Tomcat credentials..."
+sudo tee /opt/tomcreds.txt > /dev/null <<EOF
+username:apachetomcat
+password:tomcat123
+tomcat path:/opt/tomcat
+port number:8080
+
+< Integrated Tomcat Commands For You >
+- RUN TOMCAT: sudo tomcat --up
+- STOP TOMCAT: sudo tomcat --down
+- RESTART TOMCAT: sudo tomcat --restart
+- REMOVE TOMCAT: sudo tomcat --delete
+- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
+- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+
+Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
+EOF
+
+# Clean up
+log "Cleaning up..."
+rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
+rm -f openjdk-17.0.2_linux-x64_bin.tar.gz
+
+# final touch up 
+log "Tomcat Assest"
 cat /opt/tomcreds.txt
 log "Tomcat installation and configuration complete."
 exec bash 
