@@ -183,6 +183,7 @@ EOF
 # Clean up
 log "Cleaning up..."
 rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
+rm -f openjdk-17.0.2_linux-x64_bin.tar.gz
 
 # Create the tomcat script
 sudo tee /usr/local/sbin/tomcat << 'EOF'
