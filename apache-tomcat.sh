@@ -140,8 +140,10 @@ sudo sed -i '58  c <user username="apachetomcat" password="'"$CUSTOM_TOMCAT_PASS
 sudo sed -i '2 c password="'"$CUSTOM_TOMCAT_PASSWD"'"' /opt/tomcatcreds.txt
 
 echo "Password successfully updated."
-echo "Restarting tomcat..."
-# Optionally restart Tomcat to apply the new password
+#echo "Please restart Tomcat (comm: tomcat --restart) to apply changes."
+
+#restart Tomcat to apply the new password
+echo "Restarting tomcat to apply the new password..."
 sudo tomcat --restart
 echo "Tomcat restarted succesfully"
 EOF
