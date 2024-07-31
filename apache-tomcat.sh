@@ -33,6 +33,44 @@ else
     exit 1
 fi
 
+# System-specific jdk installation
+if [ "$OS" = "amazon" ]; then
+    log "Amazon-linux detected. Installing Java Development Kit..."
+    # Install Java 11
+    amazon-linux-extras install java-openjdk11 -y
+    # Install Java 17
+    sudo wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
+    sudo tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
+    sudo mv jdk-17.0.2 /opt/jdk-17
+    sudo tee /etc/profile.d/jdk.sh > /dev/null <<EOF
+    export JAVA_HOME=/opt/jdk-17
+    export PATH=\$PATH:\$JAVA_HOME/bin
+EOF
+    source /etc/profile.d/jdk.sh
+    log "Installed Java Development Kit."
+elif [ "$OS" = "rhel" ]; then
+     log "Redhat detected. Installing Java Java Development Kit..."
+     # Install Java 11
+     sudo yum install java-11-openjdk-devel -y
+     # Install Java 17
+     sudo yum install java-17-openjdk-devel -y
+     log "Installed Java Development Kit."
+elif [ "$OS" = "ubuntu" ]; then
+    log "Ubuntu detected. Updating package lists......"
+    sudo apt update
+    sudo apt-get update
+    log "Installing Java development kit..."
+    sudo add-apt-repository ppa:openjdk-r/ppa
+    # Install Java 11
+    sudo apt install openjdk-11-jdk -y
+    # Install Java 17
+    sudo apt install openjdk-17-jdk -y
+    log "Java Development Kit Installed Successfully."
+else
+    log "Unsupported OS detected. Cannot proceed with the installation."
+    exit 1
+fi
+
 # Common tomcat installation steps (Downloading, Extracting, Relocating)
 log "Downloading Tomcat..."
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz"
@@ -57,6 +95,10 @@ sudo sed -i '59  a\</tomcat-users>' $TOMCAT_USER_CONFIG
 sudo sed -i '56d' $TOMCAT_USER_CONFIG
 sudo sed -i '21d' /opt/tomcat/webapps/manager/META-INF/context.xml
 sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
+
+# Start Tomcat
+log "Starting Tomcat..."
+/opt/tomcat/bin/startup.sh
 
 # Creating and Integrating tomcat commands script 
 sudo tee /opt/portuner.sh <<'EOF'
@@ -118,49 +160,6 @@ echo "Tomcat removed successfully"
 EOF
 
 sudo chmod +x /opt/remove.sh
-
-# System-specific steps
-if [ "$OS" = "amazon" ]; then
-    log "Amazon-linux detected. Installing Java Development Kit..."
-    # Install Java 11
-    amazon-linux-extras install java-openjdk11 -y
-    # Install Java 17
-    sudo wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
-    sudo tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
-    sudo mv jdk-17.0.2 /opt/jdk-17
-    sudo tee /etc/profile.d/jdk.sh > /dev/null <<EOF
-    export JAVA_HOME=/opt/jdk-17
-    export PATH=\$PATH:\$JAVA_HOME/bin
-EOF
-    source /etc/profile.d/jdk.sh
-    log "Installed Java Development Kit."
-elif [ "$OS" = "rhel" ]; then
-     log "Redhat detected. Installing Java Java Development Kit..."
-     # Install Java 11
-     sudo yum install java-11-openjdk-devel -y
-     # Install Java 17
-     sudo yum install java-17-openjdk-devel -y
-     log "Installed Java Development Kit."
-elif [ "$OS" = "ubuntu" ]; then
-    log "Ubuntu detected. Updating package lists......"
-    sudo apt update
-    sudo apt-get update
-    log "Installing Java development kit..."
-    sudo add-apt-repository ppa:openjdk-r/ppa
-    # Install Java 11
-    sudo apt install openjdk-11-jdk -y
-    # Install Java 17
-    sudo apt install openjdk-17-jdk -y
-    log "Java Development Kit Installed Successfully."
-else
-    log "Unsupported OS detected. Cannot proceed with the installation."
-    exit 1
-fi
-
-
-# Start Tomcat
-log "Starting Tomcat..."
-/opt/tomcat/bin/startup.sh
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
@@ -229,5 +228,13 @@ echo "alias tomcat='/usr/local/sbin/tomcat'" >> ~/.bashrc
 
 # Reload the .bashrc file
 log "Reloading .bashrc..."
+if [ "$OS" = "amazon" ]; then
+    source ~/.bashrc
+elif [ "$OS" = "ubuntu" ]; then
+    . ~/.bashrc
+if
+
+log " Tomcat Assest"
+cat /opt/tomcreds.txt
 log "Tomcat installation and configuration complete."
 exec bash 
