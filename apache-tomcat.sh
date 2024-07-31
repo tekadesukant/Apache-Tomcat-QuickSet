@@ -121,31 +121,42 @@ sudo chmod +x /opt/remove.sh
 
 # System-specific steps
 if [ "$OS" = "amazon" ]; then
-    log "Amazon Linux detected. Installing Java 17..."
+    log "Amazon-linux detected. Installing Java Development Kit..."
+    # Install Java 11
     amazon-linux-extras install java-openjdk11 -y
-    wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
-    tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
-    sudo mv jdk-17.0.2/ /opt/jdk-17
-    sudo tee /etc/profile.d/jdk.sh <<EOF
+    # Install Java 17
+    sudo wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
+    sudo tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
+    sudo mv jdk-17.0.2 /opt/jdk-17
+    sudo tee /etc/profile.d/jdk.sh > /dev/null <<EOF
     export JAVA_HOME=/opt/jdk-17
     export PATH=\$PATH:\$JAVA_HOME/bin
 EOF
     source /etc/profile.d/jdk.sh
-    log "Java 17 installed."
+    log "Installed Java Development Kit."
+elif [ "$OS" = "rhel" ]; then
+     log "Redhat detected. Installing Java Java Development Kit..."
+     # Install Java 11
+     sudo yum install java-11-openjdk-devel -y
+     # Install Java 17
+     sudo yum install java-17-openjdk-devel -y
+     log "Installed Java Development Kit."
 elif [ "$OS" = "ubuntu" ]; then
-    log "Ubuntu detected. Updating package lists and installing Java 17..."
-    log "Updating package lists..."
+    log "Ubuntu detected. Updating package lists......"
     sudo apt update
     sudo apt-get update
     log "Installing Java development kit..."
     sudo add-apt-repository ppa:openjdk-r/ppa
+    # Install Java 11
     sudo apt install openjdk-11-jdk -y
+    # Install Java 17
     sudo apt install openjdk-17-jdk -y
-    log "Java installed."
+    log "Java Development Kit Installed Successfully."
 else
     log "Unsupported OS detected. Cannot proceed with the installation."
     exit 1
 fi
+
 
 # Start Tomcat
 log "Starting Tomcat..."
