@@ -71,11 +71,14 @@ else
     exit 1
 fi
 
-# Common tomcat installation steps (Downloading, Extracting, Relocating)
-log "Downloading Tomcat..."
+# Construct the download URL for Tomcat
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz"
-wget $TOMCAT_URL
 
+log "Fetching Tomcat version $TOMCAT_VERSION from $TOMCAT_URL"
+
+# Common tomcat installation steps
+log "Downloading Tomcat..."
+wget $TOMCAT_URL
 tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
 mv apache-tomcat-$TOMCAT_VERSION tomcat
 
