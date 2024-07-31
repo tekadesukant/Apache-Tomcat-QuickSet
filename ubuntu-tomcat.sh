@@ -65,7 +65,7 @@ sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
 log "Starting Tomcat..."
 /opt/tomcat/bin/startup.sh
 
-sudo tee /opt/portuner.sh <<'EOF'
+sudo tee /opt/tomcat/portuner.sh <<'EOF'
 #!/bin/bash
 # TESTED SUCCESFULLY FOR UBUNTU INSTANCE
 # Prompt the user to enter a new port number
@@ -88,9 +88,9 @@ else
 fi
 EOF
 
-sudo chmod +x /opt/portuner.sh
+sudo chmod +x /opt/tomcat/portuner.sh
 
-sudo tee /opt/passwd.sh <<'EOF'
+sudo tee /opt/tomcat/passwd.sh <<'EOF'
 #!/bin/bash
 
 # Prompt the user to enter a new password
@@ -109,32 +109,34 @@ echo "Password successfully updated."
 sudo tomcat -restart
 EOF
 
-sudo chmod +x /opt/passwd.sh
+sudo chmod +x /opt/tomcat/passwd.sh
 
-sudo tee /opt/remove.sh <<'EOF'
+sudo tee /opt/tomcat/remove.sh <<'EOF'
 #!/bin/bash
 sudo /opt/tomcat/bin/shutdown.sh
 sleep 10
 sudo rm -r /opt/tomcat/
 sudo rm -r /usr/local/sbin/tomcat
-sudo rm -f /opt/tomcatcreds.txt
+sudo rm -f /opt/tomcreds.txt
 echo "Tomcat removed successfully"
 EOF
 
-sudo chmod +x /opt/remove.sh
+sudo chmod +x /opt/tomcat/remove.sh
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
-echo "username: apachetomcat" > /opt/tomcatcreds.txt
-echo "password: $password" >> /opt/tomcatcreds.txt
-echo "tomcat path: /opt/tomcat" >> /opt/tomcatcreds.txt
-echo "port number: publicip:8080" >> /opt/tomcatcreds.txt
-echo "COMM TO RUN TOMCAT:sudo tomcat -up" >> /opt/tomcatcreds.txt 
-echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> /opt/tomcatcreds.txt 
-echo "COMM TO RESTART TOMCAT:sudo tomcat -restart" >> /opt/tomcatcreds.txt
-echo "COMM TO REMOVE TOMCAT:sudo tomcat -remove" >> /opt/tomcatcreds.txt 
-echo "COMM TO CHANGE PASSWORD TOMCAT:sudo tomcat -passwd" >> /opt/tomcatcreds.txt
-echo "COMM TO CHANGE PORT NUMBER TOMCAT:sudo tomcat -portuner" >> /opt/tomcatcreds.txt 
+sudo tee /opt/tomcat/tomcreds.txt > /dev/null <<EOF
+username: apachetomcat
+password: tomcat123
+tomcat path: /opt/tomcat
+port number: 8080
+COMM TO RUN TOMCAT: sudo tomcat --up
+COMM TO STOP TOMCAT: sudo tomcat --down
+COMM TO RESTART TOMCAT: sudo tomcat --restart
+COMM TO REMOVE TOMCAT: sudo tomcat --delete
+COMM TO CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
+COMM TO CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+EOF
 
 # Clean up
 log "Cleaning up..."
@@ -163,13 +165,13 @@ case "$1" in
         ;;
     --delete)
         echo "Removing Tomcat..."
-        sudo -u root /opt/remove.sh
+        sudo -u root /opt/tomcat/remove.sh
         ;;
     --port-change)
-        sudo -u root /opt/portuner.sh
+        sudo -u root /opt/tomcat/portuner.sh
         ;;
     --passwd-change)
-        sudo -u root /opt/passwd.sh
+        sudo -u root /opt/tomcat/passwd.sh
         ;;
     *)
         echo "Usage: tomcat {--up|--down|--restart|--delete|--port-change|--passwd-change}"
