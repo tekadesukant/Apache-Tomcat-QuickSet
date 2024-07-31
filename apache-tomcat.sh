@@ -212,6 +212,9 @@ if [ "$OS" = "amazon" ]; then
     source ~/.bashrc
 elif [ "$OS" = "ubuntu" ]; then
     . ~/.bashrc
+elif [ "$OS" = "rhel" ]; then
+    source ~/.bashrc
+    # . ~/.bashrc
 if
 
 # Save Tomcat credentials
