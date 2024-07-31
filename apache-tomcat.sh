@@ -1,12 +1,16 @@
 #!/bin/bash
-# Define log file
-LOG_FILE="/var/log/tomcat_installation.log"
 
-# Fetched latest version 
+# Note: This script has been tested on an Ubuntu instance. Testing on Amazon Linux, Rhel, Centos is currently in progress.
+
+# Latest version successfully fetched 
 TOMCAT_VERSION=11.0.0-M22
 # Previous Versions : 9.0.91, 10.1.26
 
+# Extracting major version from fetched version
 MAJOR_VERSION=$(echo "$TOMCAT_VERSION" | cut -d'.' -f1)
+
+# Log file path
+LOG_FILE="/var/log/tomcat_installation.log"
 
 # Function to log messages with timestamps
 log() {
@@ -29,7 +33,7 @@ else
     exit 1
 fi
 
-# Common installation steps
+# Common tomcat installation steps (Downloading, Extracting, Relocating)
 log "Downloading Tomcat..."
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz"
 wget $TOMCAT_URL
@@ -55,6 +59,7 @@ sudo sed -i '56d' $TOMCAT_USER_CONFIG
 sudo sed -i '21d' /opt/tomcat/webapps/manager/META-INF/context.xml
 sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
 
+# Creating and Integrating tomcat commands script 
 sudo tee /opt/tomcat/portuner.sh <<'EOF'
 #!/bin/bash
 # TESTED SUCCESFULLY FOR UBUNTU INSTANCE
@@ -113,6 +118,61 @@ EOF
 
 sudo chmod +x /opt/tomcat/remove.sh
 
+# System-specific steps
+if [ "$OS" = "amazon" ]; then
+    log "Amazon Linux detected. Installing Java 17..."
+    amazon-linux-extras install java-openjdk11 -y
+    wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
+    tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
+    sudo mv jdk-17.0.2/ /opt/jdk-17
+    sudo tee /etc/profile.d/jdk.sh <<EOF
+    export JAVA_HOME=/opt/jdk-17
+    export PATH=\$PATH:\$JAVA_HOME/bin
+EOF
+    source /etc/profile.d/jdk.sh
+    log "Java 17 installed."
+elif [ "$OS" = "ubuntu" ]; then
+    log "Ubuntu detected. Updating package lists and installing Java 17..."
+    log "Updating package lists..."
+    sudo apt update
+    sudo apt-get update
+    log "Installing Java development kit..."
+    sudo add-apt-repository ppa:openjdk-r/ppa
+    sudo apt install openjdk-11-jdk -y
+    sudo apt install openjdk-17-jdk -y
+    log "Java installed."
+else
+    log "Unsupported OS detected. Cannot proceed with the installation."
+    exit 1
+fi
+
+# Start Tomcat
+log "Starting Tomcat..."
+/opt/tomcat/bin/startup.sh
+
+# Save Tomcat credentials
+log "Saving Tomcat credentials..."
+sudo tee /opt/tomcatcreds.txt > /dev/null <<EOF
+username:apachetomcat
+password:tomcat123
+tomcat path:/opt/tomcat
+port number:8080
+
+< Integrated Tomcat Commands For You >
+- RUN TOMCAT: sudo tomcat --up
+- STOP TOMCAT: sudo tomcat --down
+- RESTART TOMCAT: sudo tomcat --restart
+- REMOVE TOMCAT: sudo tomcat --delete
+- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
+- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+
+Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
+EOF
+
+# Clean up
+log "Cleaning up..."
+rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
+
 # Create the tomcat script
 sudo tee /usr/local/sbin/tomcat << 'EOF'
 #!/bin/bash
@@ -154,65 +214,6 @@ sudo chmod +x /usr/local/sbin/tomcat
 
 # Add an alias to the .bashrc file
 echo "alias tomcat='/usr/local/sbin/tomcat'" >> ~/.bashrc
-
-# System-specific steps
-if [ "$OS" = "amazon" ]; then
-    log "Amazon Linux detected. Installing Java 17..."
-    amazon-linux-extras install java-openjdk11 -y
-    wget https://download.java.net/java/GA/jdk17.0.2/dfd4a8d0985749f896bed50d7138ee7f/8/GPL/openjdk-17.0.2_linux-x64_bin.tar.gz
-    tar xvf openjdk-17.0.2_linux-x64_bin.tar.gz
-    sudo mv jdk-17.0.2/ /opt/jdk-17
-    sudo tee /etc/profile.d/jdk.sh <<EOF
-    export JAVA_HOME=/opt/jdk-17
-    export PATH=\$PATH:\$JAVA_HOME/bin
-EOF
-    # Source the profile script to set JAVA_HOME
-    source /etc/profile.d/jdk.sh
-    log "Java 17 installed."
-elif [ "$OS" = "ubuntu" ]; then
-    log "Ubuntu detected. Updating package lists and installing Java 17..."
-    log "Updating package lists..."
-    sudo apt update
-    sudo apt-get update
-    log "Installing Java development kit..."
-    sudo add-apt-repository ppa:openjdk-r/ppa
-    sudo apt install openjdk-11-jdk -y
-    sudo apt install openjdk-17-jdk -y
-    log "Java installed."
-else
-    log "Unsupported OS detected. Cannot proceed with the installation."
-    exit 1
-fi
-
-# Verify Java installation
-java -version
-
-# Start Tomcat
-log "Starting Tomcat..."
-/opt/tomcat/bin/startup.sh
-
-# Save Tomcat credentials
-log "Saving Tomcat credentials..."
-sudo tee /opt/tomcatcreds.txt > /dev/null <<EOF
-username:apachetomcat
-password:tomcat123
-tomcat path:/opt/tomcat
-port number:8080
-
-< Integrated Tomcat Commands For You >
-- RUN TOMCAT: sudo tomcat --up
-- STOP TOMCAT: sudo tomcat --down
-- RESTART TOMCAT: sudo tomcat --restart
-- REMOVE TOMCAT: sudo tomcat --delete
-- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
-- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
-
-Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
-EOF
-
-# Clean up
-log "Cleaning up..."
-rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
 
 # Reload the .bashrc file
 log "Reloading .bashrc..."
