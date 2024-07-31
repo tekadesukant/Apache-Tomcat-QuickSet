@@ -51,7 +51,7 @@ Welcome to **Apache-Tomcat-QuickSet**, your go-to solution for effortlessly inst
 Our scripts support the following environments on AWS:
 
 - **Ubuntu & Amazon Linux**:
-  - `apache-tomcat.sh`: Compatible with installation on platforms such as Amazon Linux, Ubuntu, and RHEL Instance.
+  - `apache-tomcat.sh`: Compatible to install Tomcat on Amazon Linux, Ubuntu, and RHEL Instance.
 - **Amazon Linux**:
   - `amazonlinux-tomcat.sh`: Installs Tomcat on an Amazon Linux 2 AMI (HVM).
 - **Ubuntu**:
@@ -107,6 +107,11 @@ We've integrated convenient commands to manage Tomcat:
 - **Remove Tomcat:**
   ```bash
   tomcat --delete
+  ```
+
+- **Print Current Port Number:**
+  ```bash
+  tomcat --port
   ```
   
 - **Change Tomcat Port Number:**
