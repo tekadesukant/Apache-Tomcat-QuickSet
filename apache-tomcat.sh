@@ -9,7 +9,7 @@ TOMCAT_VERSION=11.0.0-M22
 # Extracting major version from fetched version
 MAJOR_VERSION=$(echo "$TOMCAT_VERSION" | cut -d'.' -f1)
 
-# Log file path
+# Define log file path
 LOG_FILE="/var/log/tomcat_installation.log"
 
 # Function to log messages with timestamps
