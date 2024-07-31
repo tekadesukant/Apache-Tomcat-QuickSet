@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Note: 
+# Note: This script has been tested on an Ubuntu server 22.04 LTS (HVM).
 
 # Fetched latest version 
 TOMCAT_VERSION=11.0.0-M22
@@ -28,12 +28,11 @@ sudo apt update
 sudo apt-get update
 log "Installing Java development kit..."
 sudo add-apt-repository ppa:openjdk-r/ppa
+# Install Java 11
 sudo apt install openjdk-11-jdk -y
+# Install Java 17
 sudo apt install openjdk-17-jdk -y
 log "Java installed."
-
-# Verify Java installation
-java -version
 
 # Construct the download URL for Tomcat
 TOMCAT_URL="https://dlcdn.apache.org/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/bin/apache-tomcat-$TOMCAT_VERSION.tar.gz"
@@ -43,8 +42,8 @@ log "Fetching Tomcat version $TOMCAT_VERSION from $TOMCAT_URL"
 # Download and extract Tomcat
 log "Downloading Tomcat..."
 wget $TOMCAT_URL
-tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
 
+tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
 mv apache-tomcat-$TOMCAT_VERSION tomcat
 
 # Move Tomcat to /opt and set permissions
@@ -83,13 +82,12 @@ sudo sed -i 's/port="8080"/port="'"$CUSTOM_TOMCAT_PORT"'"/' /opt/tomcat/conf/ser
 sudo sed -i '4 c portnumber="'"$CUSTOM_TOMCAT_PORT"'"' /opt/tomcatcreds.txt
 
 echo "Port number successfully updated to "'"$CUSTOM_TOMCAT_PORT"'". "
+#echo "Please restart Tomcat (comm: tomcat --restart) to apply changes."
 
-# Optionally, check Tomcat service status
-if systemctl is-active --quiet tomcat; then
-    echo "Tomcat is currently running. Please restart Tomcat (comm: tomcat -restart) to apply changes."
-else
-    echo "Tomcat is not running. You can start Tomcat (comm: tomcat -start) to apply the new port number."
-fi
+#restart Tomcat to apply the new port number
+echo "Restarting tomcat to apply the new port..."
+sudo tomcat --restart
+echo "Tomcat restarted succesfully"
 EOF
 
 sudo chmod +x /opt/portuner.sh
@@ -108,9 +106,12 @@ sudo sed -i '58  c <user username="apachetomcat" password="'"$CUSTOM_TOMCAT_PASS
 sudo sed -i '2 c password="'"$CUSTOM_TOMCAT_PASSWD"'"' /opt/tomcatcreds.txt
 
 echo "Password successfully updated."
+#echo "Please restart Tomcat (comm: tomcat --restart) to apply changes."
 
-# Optionally restart Tomcat to apply the new password
-sudo tomcat -restart
+#restart Tomcat to apply the new password
+echo "Restarting tomcat to apply the new password..."
+sudo tomcat --restart
+echo "Tomcat restarted succesfully"
 EOF
 
 sudo chmod +x /opt/passwd.sh
@@ -128,29 +129,6 @@ echo "Tomcat removed successfully"
 EOF
 
 sudo chmod +x /opt/remove.sh
-
-# Save Tomcat credentials
-log "Saving Tomcat credentials..."
-sudo tee /opt/tomcreds.txt > /dev/null <<EOF
-username:apachetomcat
-password:tomcat123
-tomcat path:/opt/tomcat
-port number:8080
-
-<-Integrated Tomcat Commands For You->
-- RUN TOMCAT: sudo tomcat --up
-- STOP TOMCAT: sudo tomcat --down
-- RESTART TOMCAT: sudo tomcat --restart
-- REMOVE TOMCAT: sudo tomcat --delete
-- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
-- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
-
-Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
-EOF
-
-# Clean up
-log "Cleaning up..."
-rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
 
 # Create the tomcat script
 sudo tee /usr/local/sbin/tomcat << 'EOF'
@@ -194,7 +172,34 @@ sudo chmod +x /usr/local/sbin/tomcat
 # Add an alias to the .bashrc file
 echo "alias tomcat='/usr/local/sbin/tomcat'" >> ~/.bashrc
 
-log "Reload the .bashrc file"
+# Reload the .bashrc file
+log "Reloading .bashrc..."
+. ~/.bashrc
+
+# Save Tomcat credentials
+log "Saving Tomcat credentials..."
+sudo tee /opt/tomcreds.txt > /dev/null <<EOF
+username:apachetomcat
+password:tomcat123
+tomcat path:/opt/tomcat
+port number:8080
+
+<-Integrated Tomcat Commands For You->
+- RUN TOMCAT: sudo tomcat --up
+- STOP TOMCAT: sudo tomcat --down
+- RESTART TOMCAT: sudo tomcat --restart
+- REMOVE TOMCAT: sudo tomcat --delete
+- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
+- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+
+Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
+EOF
+
+# Clean up
+log "Cleaning up..."
+rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
+
+# Tomcat installation and configuration final touch up 
 log "Tomcat Assest "
 cat /opt/tomcreds.txt
 log "Tomcat installation and configuration complete."
