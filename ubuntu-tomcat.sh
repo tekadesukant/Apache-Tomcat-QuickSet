@@ -42,7 +42,6 @@ log "Fetching Tomcat version $TOMCAT_VERSION from $TOMCAT_URL"
 # Download and extract Tomcat
 log "Downloading Tomcat..."
 wget $TOMCAT_URL
-
 tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
 mv apache-tomcat-$TOMCAT_VERSION tomcat
 
