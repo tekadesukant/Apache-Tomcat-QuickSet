@@ -51,7 +51,7 @@ Welcome to **Apache-Tomcat-QuickSet**, your go-to solution for effortlessly inst
 Our scripts support the following environments on AWS:
 
 - **Ubuntu & Amazon Linux**:
-  - `apache-tomcat.sh`: Compatible to install Tomcat on Amazon Linux, Ubuntu, and RHEL Instance.
+  - `apache-tomcat.sh`: Compatible to Install Tomcat on Amazon Linux, Ubuntu, and RHEL Instance.
 - **Amazon Linux**:
   - `amazonlinux-tomcat.sh`: Installs Tomcat on an Amazon Linux 2 AMI (HVM).
 - **Ubuntu**:
