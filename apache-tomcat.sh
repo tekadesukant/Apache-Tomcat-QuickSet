@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Note: This script has been tested on an Ubuntu instance. Testing on Amazon Linux and Rhel instance is currently in progress.
+# Note: This script has been tested on an Ubuntu server 22.04 LTS (HVM). Testing on Amazon Linux and Rhel instance is currently in progress.
 
 # Latest version successfully fetched 
 TOMCAT_VERSION=11.0.0-M22
