@@ -118,9 +118,9 @@ echo "Port number successfully updated to "'"$CUSTOM_TOMCAT_PORT"'". "
 
 # Optionally, check Tomcat service status
 if systemctl is-active --quiet tomcat; then
-    echo "Tomcat is currently running. Please restart Tomcat (comm: tomcat -restart) to apply changes."
+    echo "Tomcat is currently running. Please restart Tomcat (comm: tomcat --restart) to apply changes."
 else
-    echo "Tomcat is not running. You can start Tomcat (comm: tomcat -start) to apply the new port number."
+    echo "Tomcat is not running. You can start Tomcat (comm: tomcat --up) to apply the new port number."
 fi
 EOF
 
@@ -140,9 +140,10 @@ sudo sed -i '58  c <user username="apachetomcat" password="'"$CUSTOM_TOMCAT_PASS
 sudo sed -i '2 c password="'"$CUSTOM_TOMCAT_PASSWD"'"' /opt/tomcatcreds.txt
 
 echo "Password successfully updated."
-
+echo "Restarting tomcat..."
 # Optionally restart Tomcat to apply the new password
-sudo tomcat -restart
+sudo tomcat --restart
+echo "Tomcat restarted succesfully"
 EOF
 
 sudo chmod +x /opt/passwd.sh
