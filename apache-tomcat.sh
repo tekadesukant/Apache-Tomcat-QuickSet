@@ -103,7 +103,7 @@ log "Starting Tomcat..."
 # Creating and Integrating tomcat commands script 
 sudo tee /opt/portuner.sh <<'EOF'
 #!/bin/bash
-# Note : This Script Tested Succesfully on UBUNTU INSTANCE
+# Note : 
 # Prompt the user to enter a new port number
 echo "Enter new port number (1024-65535): "
 read CUSTOM_TOMCAT_PORT
@@ -128,7 +128,7 @@ sudo chmod +x /opt/portuner.sh
 
 sudo tee /opt/passwd.sh <<'EOF'
 #!/bin/bash
-
+# Note: 
 # Prompt the user to enter a new password
 echo "Enter new Tomcat manager password (minimum 6 characters): "
 read CUSTOM_TOMCAT_PASSWD
