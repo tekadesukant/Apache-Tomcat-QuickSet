@@ -59,9 +59,9 @@ sudo sed -i '21d' /opt/tomcat/webapps/manager/META-INF/context.xml
 sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
 
 # Creating and Integrating tomcat commands script 
-sudo tee /opt/tomcat/portuner.sh <<'EOF'
+sudo tee /opt/portuner.sh <<'EOF'
 #!/bin/bash
-# TESTED SUCCESFULLY FOR UBUNTU INSTANCE
+# Note : This Script Tested Succesfully on UBUNTU INSTANCE
 # Prompt the user to enter a new port number
 echo "Enter new port number (1024-65535): "
 read CUSTOM_TOMCAT_PORT
@@ -82,9 +82,9 @@ else
 fi
 EOF
 
-sudo chmod +x /opt/tomcat/portuner.sh
+sudo chmod +x /opt/portuner.sh
 
-sudo tee /opt/tomcat/passwd.sh <<'EOF'
+sudo tee /opt/passwd.sh <<'EOF'
 #!/bin/bash
 
 # Prompt the user to enter a new password
@@ -103,19 +103,21 @@ echo "Password successfully updated."
 sudo tomcat -restart
 EOF
 
-sudo chmod +x /opt/tomcat/passwd.sh
+sudo chmod +x /opt/passwd.sh
 
-sudo tee /opt/tomcat/remove.sh <<'EOF'
+sudo tee /opt/remove.sh <<'EOF'
 #!/bin/bash
 sudo /opt/tomcat/bin/shutdown.sh
 sleep 10
 sudo rm -r /opt/tomcat/
 sudo rm -r /usr/local/sbin/tomcat
-sudo rm -f /opt/tomcatcreds.txt
+sudo rm -f /opt/tomcreds.txt
+sudo rm -f /opt/portuner.sh
+sudo rm -f /opt/passwd.sh
 echo "Tomcat removed successfully"
 EOF
 
-sudo chmod +x /opt/tomcat/remove.sh
+sudo chmod +x /opt/remove.sh
 
 # System-specific steps
 if [ "$OS" = "amazon" ]; then
@@ -151,7 +153,7 @@ log "Starting Tomcat..."
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
-sudo tee /opt/tomcatcreds.txt > /dev/null <<EOF
+sudo tee /opt/tomcreds.txt > /dev/null <<EOF
 username:apachetomcat
 password:tomcat123
 tomcat path:/opt/tomcat
@@ -195,13 +197,13 @@ case "$1" in
         ;;
     --delete)
         echo "Removing Tomcat..."
-        sudo -u root /opt/tomcat/remove.sh
+        sudo -u root /opt/remove.sh
         ;;
     --port-change)
-        sudo -u root /opt/tomcat/portuner.sh
+        sudo -u root /opt/portuner.sh
         ;;
     --passwd-change)
-        sudo -u root /opt/tomcat/passwd.sh
+        sudo -u root /opt/passwd.sh
         ;;
     *)
         echo "Usage: tomcat {--up|--down|--restart|--delete|--port-change|--passwd-change}"
