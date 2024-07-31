@@ -167,6 +167,14 @@ EOF
 
 sudo chmod +x /opt/remove.sh
 
+sudo tee /opt/fetchport.sh <<'EOF'
+#!/bin/bash
+echo "Current-'$(sed -n '/portnumber/p' /opt/tomcreds.txt)'"
+#sed -n '4p' /opt/tomcreds.txt
+EOF
+
+sudo chmod +x /opt/fetchport.sh
+
 # Create the tomcat script
 sudo tee /usr/local/sbin/tomcat << 'EOF'
 #!/bin/bash
@@ -192,6 +200,9 @@ case "$1" in
         echo "Removing Tomcat..."
         sudo -u root /opt/remove.sh
         ;;
+    --port)
+        sudo -u root /opt/fetchport.sh
+        ;;
     --port-change)
         sudo -u root /opt/portuner.sh
         ;;
@@ -199,7 +210,7 @@ case "$1" in
         sudo -u root /opt/passwd.sh
         ;;
     *)
-        echo "Usage: tomcat {--up|--down|--restart|--delete|--port-change|--passwd-change}"
+        echo "Usage: tomcat {--up|--down|--restart|--delete|--port|--port-change|--passwd-change}"
         ;;
 esac
 EOF
@@ -229,12 +240,13 @@ tomcat path:/opt/tomcat
 port number:8080
 
 < Integrated Tomcat Commands For You >
-- RUN TOMCAT: sudo tomcat --up
-- STOP TOMCAT: sudo tomcat --down
-- RESTART TOMCAT: sudo tomcat --restart
-- REMOVE TOMCAT: sudo tomcat --delete
-- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
-- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+- Start Tomcat: tomcat --up 
+- Stop Tomcat: tomcat --down
+- Restart Tomcat: tomcat --restart
+- Remove Tomcat: tomcat --delete
+- Print Current PortNumber: tomcat --port
+- Change Tomcat PortNumber: tomcat --port-change
+- Change Tomcat Password: tomcat --passwd-change
 
 Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
 EOF
