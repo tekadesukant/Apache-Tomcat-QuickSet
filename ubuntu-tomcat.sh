@@ -1,12 +1,16 @@
 #!/bin/bash
-# Define log file
-LOG_FILE="/var/log/tomcat_installation.log"
+
+# Note: 
 
 # Fetched latest version 
 TOMCAT_VERSION=11.0.0-M22
 # Previous Versions : 9.0.91, 10.1.26
 
+# Extracting major version from fetched version
 MAJOR_VERSION=$(echo "$TOMCAT_VERSION" | cut -d'.' -f1)
+
+# Define log file
+LOG_FILE="/var/log/tomcat_installation.log"
 
 # Function to log messages with timestamps
 log() {
@@ -48,9 +52,8 @@ log "Moving Tomcat to /opt and setting permissions..."
 sudo mv tomcat /opt/
 sudo chown -R $USER:$USER /opt/tomcat
 
-password=tomcat123
-
 # Configure Tomcat users
+password=tomcat123
 TOMCAT_USER_CONFIG="/opt/tomcat/conf/tomcat-users.xml"
 log "Configuring Tomcat users..."
 sudo sed -i '56  a\<role rolename="manager-gui"/>' $TOMCAT_USER_CONFIG
@@ -65,9 +68,10 @@ sudo sed -i '22d' /opt/tomcat/webapps/manager/META-INF/context.xml
 log "Starting Tomcat..."
 /opt/tomcat/bin/startup.sh
 
-sudo tee /opt/tomcat/portuner.sh <<'EOF'
+# Creating and Integrating tomcat commands script
+sudo tee /opt/portuner.sh <<'EOF'
 #!/bin/bash
-# TESTED SUCCESFULLY FOR UBUNTU INSTANCE
+# Note : This Script Tested Succesfully on UBUNTU INSTANCE
 # Prompt the user to enter a new port number
 echo "Enter new port number (1024-65535): "
 read CUSTOM_TOMCAT_PORT
@@ -88,9 +92,9 @@ else
 fi
 EOF
 
-sudo chmod +x /opt/tomcat/portuner.sh
+sudo chmod +x /opt/portuner.sh
 
-sudo tee /opt/tomcat/passwd.sh <<'EOF'
+sudo tee /opt/passwd.sh <<'EOF'
 #!/bin/bash
 
 # Prompt the user to enter a new password
@@ -109,33 +113,39 @@ echo "Password successfully updated."
 sudo tomcat -restart
 EOF
 
-sudo chmod +x /opt/tomcat/passwd.sh
+sudo chmod +x /opt/passwd.sh
 
-sudo tee /opt/tomcat/remove.sh <<'EOF'
+sudo tee /opt/remove.sh <<'EOF'
 #!/bin/bash
 sudo /opt/tomcat/bin/shutdown.sh
 sleep 10
 sudo rm -r /opt/tomcat/
 sudo rm -r /usr/local/sbin/tomcat
 sudo rm -f /opt/tomcreds.txt
+sudo rm -f /opt/portuner.sh
+sudo rm -f /opt/passwd.sh
 echo "Tomcat removed successfully"
 EOF
 
-sudo chmod +x /opt/tomcat/remove.sh
+sudo chmod +x /opt/remove.sh
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
-sudo tee /opt/tomcat/tomcreds.txt > /dev/null <<EOF
-username: apachetomcat
-password: tomcat123
-tomcat path: /opt/tomcat
-port number: 8080
-COMM TO RUN TOMCAT: sudo tomcat --up
-COMM TO STOP TOMCAT: sudo tomcat --down
-COMM TO RESTART TOMCAT: sudo tomcat --restart
-COMM TO REMOVE TOMCAT: sudo tomcat --delete
-COMM TO CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
-COMM TO CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+sudo tee /opt/tomcreds.txt > /dev/null <<EOF
+username:apachetomcat
+password:tomcat123
+tomcat path:/opt/tomcat
+port number:8080
+
+<-Integrated Tomcat Commands For You->
+- RUN TOMCAT: sudo tomcat --up
+- STOP TOMCAT: sudo tomcat --down
+- RESTART TOMCAT: sudo tomcat --restart
+- REMOVE TOMCAT: sudo tomcat --delete
+- CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
+- CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+
+Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
 EOF
 
 # Clean up
@@ -165,13 +175,13 @@ case "$1" in
         ;;
     --delete)
         echo "Removing Tomcat..."
-        sudo -u root /opt/tomcat/remove.sh
+        sudo -u root /opt/remove.sh
         ;;
     --port-change)
-        sudo -u root /opt/tomcat/portuner.sh
+        sudo -u root /opt/portuner.sh
         ;;
     --passwd-change)
-        sudo -u root /opt/tomcat/passwd.sh
+        sudo -u root /opt/passwd.sh
         ;;
     *)
         echo "Usage: tomcat {--up|--down|--restart|--delete|--port-change|--passwd-change}"
@@ -185,6 +195,7 @@ sudo chmod +x /usr/local/sbin/tomcat
 echo "alias tomcat='/usr/local/sbin/tomcat'" >> ~/.bashrc
 
 log "Reload the .bashrc file"
+log "Tomcat Assest "
+cat /opt/tomcreds.txt
 log "Tomcat installation and configuration complete."
-# Reload the .bashrc file
 exec bash
