@@ -194,16 +194,18 @@ log "Starting Tomcat..."
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
-echo "username: apachetomcat" > /opt/tomcatcreds.txt
-echo "password: $password" >> /opt/tomcatcreds.txt
-echo "tomcat path: /opt/tomcat" >> /opt/tomcatcreds.txt
-echo "port number:"8080"" >> /opt/tomcatcreds.txt
-echo "COMM TO RUN TOMCAT:sudo tomcat -up" >> /opt/tomcatcreds.txt 
-echo "COMM TO STOP TOMCAT:sudo tomcat -down" >> /opt/tomcatcreds.txt 
-echo "COMM TO RESTART TOMCAT:sudo tomcat -restart" >> /opt/tomcatcreds.txt 
-echo "COMM TO REMOVE TOMCAT:sudo tomcat -remove" >> /opt/tomcatcreds.txt 
-echo "COMM TO CHANGE PASSWORD TOMCAT:sudo tomcat -passwd" >> /opt/tomcatcreds.txt
-echo "COMM TO CHANGE PORT NUMBER TOMCAT:sudo tomcat -portuner" >> /opt/tomcatcreds.txt 
+sudo tee /opt/tomcatcreds.txt > /dev/null <<EOF
+username: apachetomcat
+password: tomcat123
+tomcat path: /opt/tomcat
+port number: 8080
+COMM TO RUN TOMCAT: sudo tomcat --up
+COMM TO STOP TOMCAT: sudo tomcat --down
+COMM TO RESTART TOMCAT: sudo tomcat --restart
+COMM TO REMOVE TOMCAT: sudo tomcat --delete
+COMM TO CHANGE PASSWORD TOMCAT: sudo tomcat --passwd-change
+COMM TO CHANGE PORT NUMBER TOMCAT: sudo tomcat --port-change
+EOF
 
 # Clean up
 log "Cleaning up..."
