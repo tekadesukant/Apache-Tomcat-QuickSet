@@ -238,7 +238,7 @@ log "Cleaning up..."
 rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
 rm -f openjdk-17.0.2_linux-x64_bin.tar.gz
 
-# final touch up 
+# Tomcat installation and configuration final touch up 
 log "Tomcat Assest"
 cat /opt/tomcreds.txt
 log "Tomcat installation and configuration complete."
