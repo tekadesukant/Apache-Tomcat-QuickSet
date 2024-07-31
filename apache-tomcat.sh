@@ -47,14 +47,14 @@ if [ "$OS" = "amazon" ]; then
     export PATH=\$PATH:\$JAVA_HOME/bin
 EOF
     source /etc/profile.d/jdk.sh
-    log "Installed Java Development Kit."
+    log "Installed Java Development Kit Successfully."
 elif [ "$OS" = "rhel" ]; then
      log "Redhat detected. Installing Java Java Development Kit..."
      # Install Java 11
      sudo yum install java-11-openjdk-devel -y
      # Install Java 17
      sudo yum install java-17-openjdk-devel -y
-     log "Installed Java Development Kit."
+     log "Installed Java Development Kit Successfully."
 elif [ "$OS" = "ubuntu" ]; then
     log "Ubuntu detected. Updating package lists......"
     sudo apt update
@@ -65,7 +65,7 @@ elif [ "$OS" = "ubuntu" ]; then
     sudo apt install openjdk-11-jdk -y
     # Install Java 17
     sudo apt install openjdk-17-jdk -y
-    log "Java Development Kit Installed Successfully."
+    log "Installed Java Development Kit Successfully."
 else
     log "Unsupported OS detected. Cannot proceed with the installation."
     exit 1
