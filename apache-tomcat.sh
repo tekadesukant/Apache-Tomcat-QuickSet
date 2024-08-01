@@ -34,7 +34,7 @@ else
 fi
 
 # System-specific jdk installation
-if [ "$OS" = "amazon" ]; then
+if [ "$OS" = "amzn" ]; then
     log "Amazon-linux detected. Installing Java Development Kit..."
     # Install Java 11
     amazon-linux-extras install java-openjdk11 -y
