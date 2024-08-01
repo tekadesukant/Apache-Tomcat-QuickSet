@@ -229,7 +229,7 @@ elif [ "$OS" = "ubuntu" ]; then
 elif [ "$OS" = "rhel" ]; then
     source ~/.bashrc
     # . ~/.bashrc
-if
+fi
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
