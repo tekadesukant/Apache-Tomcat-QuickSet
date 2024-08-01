@@ -14,7 +14,7 @@ LOG_FILE="/var/log/tomcat_installation.log"
 
 # Function to log messages with timestamps
 log() {
-    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" | tee -a $LOG_FILE
+    echo "$(date +'%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
 }
 
 # Start logging
@@ -82,9 +82,12 @@ wget $TOMCAT_URL
 tar -zxvf apache-tomcat-$TOMCAT_VERSION.tar.gz
 mv apache-tomcat-$TOMCAT_VERSION tomcat
 
-# Move Tomcat to /opt and set permissions
+# Move Tomcat to /opt 
 log "Moving Tomcat to /opt and setting permissions..."
 sudo mv tomcat /opt/
+
+# set permissions
+log "Setting permissions..."
 sudo chown -R $USER:$USER /opt/tomcat
 
 # Configure Tomcat users
@@ -106,41 +109,44 @@ log "Starting Tomcat..."
 # Creating and Integrating tomcat commands script 
 sudo tee /opt/portuner.sh <<'EOF'
 #!/bin/bash
-# Note : 
-# Prompt the user to enter a new port number
-echo "Enter new port number (1024-65535): "
-read CUSTOM_TOMCAT_PORT
+# Store the provided port number in CUSTOM_TOMCAT_PORT
+CUSTOM_TOMCAT_PORT=$1
+echo "Changing Tomcat port to '$CUSTOM_TOMCAT_PORT'..."
 
 # Update the port number in server.xml
 sudo sed -i 's/port="8080"/port="'"$CUSTOM_TOMCAT_PORT"'"/' /opt/tomcat/conf/server.xml
 
 # Update the portnumber in tomcatcreds.txt
-sudo sed -i '4 c portnumber="'"$CUSTOM_TOMCAT_PORT"'"' /opt/tomcatcreds.txt
+sudo sed -i '4 c portnumber="'$CUSTOM_TOMCAT_PORT'"' /opt/tomcreds.txt
 
-echo "Port number successfully updated to "'"$CUSTOM_TOMCAT_PORT"'". "
+echo "Port number successfully updated to "'$CUSTOM_TOMCAT_PORT'". "
+#echo "Please restart Tomcat (comm: tomcat --restart) to apply changes."
 
-# Optionally, check Tomcat service status
-if systemctl is-active --quiet tomcat; then
-    echo "Tomcat is currently running. Please restart Tomcat (comm: tomcat --restart) to apply changes."
-else
-    echo "Tomcat is not running. You can start Tomcat (comm: tomcat --up) to apply the new port number."
-fi
+#restart Tomcat to apply the new port number
+echo "Restarting tomcat to apply the new port..."
+sudo tomcat --restart
+echo "Tomcat restarted succesfully"
+
+# check Tomcat service status (currently in test)
+#if systemctl is-active --quiet tomcat; then
+    #echo "Tomcat is currently running. Please restart Tomcat (comm: tomcat --restart) to apply changes."
+#else
+    #echo "Tomcat is not running. You can start Tomcat (comm: tomcat --up) to apply the new port number."
+#fi
 EOF
 
 sudo chmod +x /opt/portuner.sh
 
 sudo tee /opt/passwd.sh <<'EOF'
 #!/bin/bash
-# Note: 
-# Prompt the user to enter a new password
-echo "Enter new Tomcat manager password (minimum 6 characters): "
-read CUSTOM_TOMCAT_PASSWD
-
+# Store the provided port number in CUSTOM_TOMCAT_PASSWD
+CUSTOM_TOMCAT_PASSWD=$2
+echo "Changing Tomcat password..."
 # Update the password in tomcat-users.xml
 sudo sed -i '58  c <user username="apachetomcat" password="'"$CUSTOM_TOMCAT_PASSWD"'" roles="manager-gui,manager-script"/>' /opt/tomcat/conf/tomcat-users.xml
 
 # Update the password in tomcatcreds.txt
-sudo sed -i '2 c password="'"$CUSTOM_TOMCAT_PASSWD"'"' /opt/tomcatcreds.txt
+sudo sed -i '2 c password="'$CUSTOM_TOMCAT_PASSWD'"' /opt/tomcatcreds.txt
 
 echo "Password successfully updated."
 #echo "Please restart Tomcat (comm: tomcat --restart) to apply changes."
@@ -176,7 +182,7 @@ EOF
 sudo chmod +x /opt/fetchport.sh
 
 # Create the tomcat script
-sudo tee /usr/local/sbin/tomcat << 'EOF'
+sudo tee /usr/local/sbin/tomcat > /dev/null <<'EOF'
 #!/bin/bash
 
 case "$1" in
@@ -202,15 +208,15 @@ case "$1" in
         ;;
     --port)
         sudo -u root /opt/fetchport.sh
-        ;;
+        ;;  
     --port-change)
-        sudo -u root /opt/portuner.sh
+        sudo -u root /opt/portuner.sh "$2"
         ;;
     --passwd-change)
-        sudo -u root /opt/passwd.sh
+        sudo -u root /opt/passwd.sh "$2"
         ;;
     *)
-        echo "Usage: tomcat {--up|--down|--restart|--delete|--port|--port-change|--passwd-change}"
+        echo "Usage: tomcat {--up|--down|--restart|--delete|--port|--port-change <new_port>|--passwd-change <new_password>}"
         ;;
 esac
 EOF
@@ -221,15 +227,15 @@ sudo chmod +x /usr/local/sbin/tomcat
 echo "alias tomcat='/usr/local/sbin/tomcat'" >> ~/.bashrc
 
 # Reload the .bashrc file
-log "Reloading .bashrc..."
-if [ "$OS" = "amazon" ]; then
-    source ~/.bashrc
-elif [ "$OS" = "ubuntu" ]; then
-    . ~/.bashrc
-elif [ "$OS" = "rhel" ]; then
-    source ~/.bashrc
+#log "Reloading .bashrc..."
+#if [ "$OS" = "amazon" ]; then
+#    source ~/.bashrc
+#elif [ "$OS" = "ubuntu" ]; then
+    #. ~/.bashrc
+#elif [ "$OS" = "rhel" ]; then
+    #source ~/.bashrc
     # . ~/.bashrc
-fi
+#fi
 
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
@@ -237,7 +243,7 @@ sudo tee /opt/tomcreds.txt > /dev/null <<EOF
 username:apachetomcat
 password:tomcat123
 tomcat path:/opt/tomcat
-port number:8080
+portnumber:8080
 
 < Integrated Tomcat Commands For You >
 - Start Tomcat: tomcat --up 
