@@ -126,13 +126,6 @@ echo "Port number successfully updated to "'$CUSTOM_TOMCAT_PORT'". "
 echo "Restarting tomcat to apply the new port..."
 sudo tomcat --restart
 echo "Tomcat restarted succesfully"
-
-# check Tomcat service status (currently in test)
-#if systemctl is-active --quiet tomcat; then
-    #echo "Tomcat is currently running. Please restart Tomcat (comm: tomcat --restart) to apply changes."
-#else
-    #echo "Tomcat is not running. You can start Tomcat (comm: tomcat --up) to apply the new port number."
-#fi
 EOF
 
 sudo chmod +x /opt/portuner.sh
@@ -164,6 +157,7 @@ sudo tee /opt/remove.sh <<'EOF'
 sudo /opt/tomcat/bin/shutdown.sh
 sleep 10
 sudo rm -r /opt/tomcat/
+sudo rm -fR /opt/jdk*
 sudo rm -r /usr/local/sbin/tomcat
 sudo rm -f /opt/tomcreds.txt
 sudo rm -f /opt/portuner.sh
@@ -210,7 +204,7 @@ case "$1" in
         sudo -u root /opt/fetchport.sh
         ;;  
     --port-change)
-        sudo -u root /opt/portuner.sh "$2"
+        sudo -u root /opt/portuner.sh "$1"
         ;;
     --passwd-change)
         sudo -u root /opt/passwd.sh "$2"
