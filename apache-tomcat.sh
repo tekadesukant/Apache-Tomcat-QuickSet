@@ -133,8 +133,9 @@ sudo sed -i ' /<Connector port/  c \ \ \ \ <Connector port="'$1'" protocol="HTTP
 # Update the portnumber in tomcatcreds.txt
 sed -i '4 i portnumber:'$1' ' /opt/tomcreds.txt
 sed -i '5d' /opt/tomcreds.txt
+
 echo "Port number successfully updated to $1. "
-echo "Restart tomcat (comm: tomcat --restart) to apply chnages"
+echo "Restart tomcat (comm: tomcat --restart) to apply changes"
 EOF
 
 sudo chmod +x /opt/portuner.sh
@@ -151,7 +152,7 @@ sudo sed -i '58  c <user username="apachetomcat" password="'$1'" roles="manager-
 sudo sed -i '2 c password='$1' ' /opt/tomcreds.txt
 
 echo "Password successfully updated."
-
+echo "Restart tomcat (comm: tomcat --restart) to apply changes"
 EOF
 
 sudo chmod +x /opt/passwd.sh
