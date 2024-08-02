@@ -116,12 +116,17 @@ We've integrated convenient commands to manage Tomcat:
   
 - **Change Tomcat Port Number:**
   ```bash
-  tomcat --port-change
+  tomcat --port-change <new_port>
   ```
 
 - **Change Tomcat Password:**
   ```bash
-  tomcat --passwd-change
+  tomcat --passwd-change <new_password>
+  ```
+
+- **list all supported commands**
+  ```bash
+  tomcat --help 
   ```
   
 ## Features
