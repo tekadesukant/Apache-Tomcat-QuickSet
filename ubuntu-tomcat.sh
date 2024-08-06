@@ -3,7 +3,7 @@
 # Note: This script has been tested on an Ubuntu server 22.04 LTS (HVM).
 
 # Fetched latest version 
-TOMCAT_VERSION=11.0.0-M22
+TOMCAT_VERSION=11.0.0-M24
 # Previous Versions : 9.0.91, 10.1.26
 
 # Extracting major version from fetched version
