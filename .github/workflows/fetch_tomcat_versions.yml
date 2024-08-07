@@ -22,9 +22,11 @@ jobs:
           TOMCAT_VERSION=$(echo "${LATEST_VERSION}" | cut -c 2-)
           # Update the shell script with the fetched values
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" amazonlinux-tomcat.sh
+          sed -i "7 c # Previous Versions : $(echo "${LATEST9}" | cut -c 2-), $(echo "${LATEST10}" | cut -c 2-)" amazonlinux-tomcat.sh
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" ubuntu-tomcat.sh
+          sed -i "7 c # Previous Versions : $(echo "${LATEST9}" | cut -c 2-), $(echo "${LATEST10}" | cut -c 2-)" ubuntu-tomcat.sh
           sed -i "6 c TOMCAT_VERSION=${TOMCAT_VERSION}" apache-tomcat.sh
-          sed -i "7 c # Previous Versions : $(echo "${LATEST9}" | cut -c 2-), 10.1.26" apache-tomcat.sh
+          sed -i "7 c # Previous Versions : $(echo "${LATEST9}" | cut -c 2-), $(echo "${LATEST10}" | cut -c 2-)" apache-tomcat.sh
 
       - name: Commit updated Tomcat versions
         run: |
