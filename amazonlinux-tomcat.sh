@@ -3,7 +3,7 @@
 # Note: This script has been tested on an Amazon Linux 2 AMI (HVM).
 
 # Latest version successfully fetched 
-TOMCAT_VERSION=11.0.0-M25
+TOMCAT_VERSION=11.0.0-M26
 # Previous Versions : 9.0.94, 10.1.29
 
 # Extracting major version from fetched version
