@@ -52,7 +52,7 @@ if [ "$OS" = "amzn" ]; then
         sudo yum install java-$SUPPORTED_JAVA-amazon-corretto -y || true   
         sudo yum install java-$SUPPORTED_JAVA-amazon-corretto-devel -y || true
     elif [ "$SUPPORTED_JAVA" = "8" ]; then
-        sudo amazon-linux-extras enable corretto8
+        sudo amazon-linux-extras enable corretto8 || sudo dnf update -y
         sudo yum install java-1.8.0-amazon-corretto-devel -y
     else
         log "Unsupported Java version $SUPPORTED_JAVA for Amazon Linux."
