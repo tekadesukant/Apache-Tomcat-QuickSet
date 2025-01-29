@@ -72,8 +72,8 @@ elif [ "$OS" = "rhel" ] || [ "$OS" = "centos" ]; then
     log "Installed Java $SUPPORTED_JAVA successfully."
 elif [ "$OS" = "ubuntu" ] || [ "$OS" = "debian" ]; then
     log "Ubuntu detected. Updating package lists..."
-    sudo apt update
-    sudo apt-get upgrade
+    sudo apt update -y
+    sudo apt-get upgrade -y
     log "Installing Java Development Kit..."
     sudo add-apt-repository ppa:openjdk-r/ppa -y 
     sudo apt install openjdk-$SUPPORTED_JAVA-jdk -y
