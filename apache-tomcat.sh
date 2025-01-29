@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Note: This script has been tested on an Ubuntu server 22.04 LTS (HVM) and Amazon Linux 2 AMI (HVM). Testing on Rhel instance is currently in progress.
+# Note: This script has been tested on an Ubuntu server 22.04/24.04, RHEL 9 and Amazon Linux 2. Testing on CentOS instance is currently in progress.
 
 # Latest version successfully fetched 
 TOMCAT_VERSION=11.0.2
@@ -33,33 +33,52 @@ else
     exit 1
 fi
 
-# System-specific jdk installation
+sudo yum install wget -y
+
+# Fetch supported Java version for the current Tomcat version
+RELEASE_NOTES_URL="https://archive.apache.org/dist/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/RELEASE-NOTES"
+SUPPORTED_JAVA=$(wget -qO- "$RELEASE_NOTES_URL" | \
+    grep -iE "Tomcat.*is designed to run on Java" | \
+    sed -E 's/.*run on Java ([0-9]+).*/\1/' | head -1)
+
+if [ -z "$SUPPORTED_JAVA" ]; then
+     log "Supported Java version for Tomcat $TOMCAT_VERSION: Java $SUPPORTED_JAVA"
+fi
+
+# System-specific JDK installation
 if [ "$OS" = "amzn" ]; then
-    log "Amazon-linux detected. Installing Java Development Kit..."
-    # Install Java 11
-    amazon-linux-extras install java-openjdk11 -y
-    # Install Java 17
-    wget --no-check-certificate -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.rpm
-    sudo rpm -Uvh jdk-17_linux-x64_bin.rpm
-    log "Installed Java Development Kit Successfully."
-elif [ "$OS" = "rhel" ]; then
-     log "Redhat detected. Installing Java Java Development Kit..."
-     # Install Java 11
-     sudo yum install java-11-openjdk-devel -y
-     # Install Java 17
-     sudo yum install java-17-openjdk-devel -y
-     log "Installed Java Development Kit Successfully."
+    log "Amazon Linux detected. Installing Java Development Kit..."
+    if [ "$SUPPORTED_JAVA" -ne "8" ]; then
+        sudo yum install java-$SUPPORTED_JAVA-amazon-corretto -y || true   
+        sudo yum install java-$SUPPORTED_JAVA-amazon-corretto-devel -y || true
+    elif [ "$SUPPORTED_JAVA" = "8" ]; then
+        sudo amazon-linux-extras enable corretto8
+        sudo yum install java-1.8.0-amazon-corretto-devel -y
+    else
+        log "Unsupported Java version $SUPPORTED_JAVA for Amazon Linux."
+        exit 1
+    fi
+    log "Installed Java $SUPPORTED_JAVA successfully."
+elif [ "$OS" = "rhel" ] || [ "$OS" = "centos" ]; then
+    log "RHEL or CentOS detected. Installing Java Development Kit..."
+    if [ "$SUPPORTED_JAVA" = "8" ]; then
+        sudo yum install java-1.8.0-openjdk-devel -y
+    elif [ "$SUPPORTED_JAVA" -ne "8" ]; then
+        sudo yum install java-$SUPPORTED_JAVA-openjdk-devel -y
+    else
+        log "Unsupported Java version $SUPPORTED_JAVA for RHEL or CentOS."
+        exit 1
+    fi
+    log "Installed Java $SUPPORTED_JAVA successfully."
 elif [ "$OS" = "ubuntu" ]; then
-    log "Ubuntu detected. Updating package lists......"
+    log "Ubuntu detected. Updating package lists..."
     sudo apt update
     sudo apt-get update
-    log "Installing Java development kit..."
+    log "Installing Java Development Kit..."
     sudo add-apt-repository ppa:openjdk-r/ppa -y 
-    # Install Java 11
-    sudo apt install openjdk-11-jdk -y
-    # Install Java 17
-    sudo apt install openjdk-17-jdk -y
-    log "Installed Java Development Kit Successfully."
+    sudo apt install openjdk-$SUPPORTED_JAVA-jdk -y
+
+    log "Installed Java $SUPPORTED_JAVA successfully."
 else
     log "Unsupported OS detected. Cannot proceed with the installation."
     exit 1
@@ -219,14 +238,18 @@ case "$1" in
     --passwd-change)
         sudo -u root /opt/passwd.sh "$2"
         ;;
-    --help)
-        echo "Usage: tomcat {--up (start) | --down (stop) |--restart (stop -> start)}"
-        echo "Usage: tomcat {--delete (remove tomcat completely) | --help (list all commands)}"
-        echo "Usage: tomcat {--port (print current port) | --port-change <new_port> (change port number)}"
-        echo "Usage: tomcat {--passwd (print current password) | --passwd-change <new_passwd> (change password)}"
+   --help)
+        echo "Commands:"
+        echo "--up: Start Tomcat"
+        echo "--down: Stop Tomcat"
+        echo "--restart: Restart Tomcat"
+        echo "--delete: Remove Tomcat"
+        echo "--port: Show current port"
+        echo "--port-change <port>: Change port"
+        echo "--passwd-change <password>: Change password"
         ;;
     *)
-        echo "Usage: tomcat {--up|--down|--restart|--delete|--port|--port-change <new_port>|--passwd-change <new_password>}"
+        echo "Invalid command. Use --help for options."
         ;;
 esac
 EOF
@@ -239,10 +262,6 @@ echo "alias tomcat='/usr/local/sbin/tomcat'" >> ~/.bashrc
 # Clean up
 log "Cleaning up..."
 rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
-rm -f openjdk-17.0.2_linux-x64_bin.tar.gz
 
-# Tomcat installation and configuration final touch up 
-log "Tomcat Assest"
-cat /opt/tomcreds.txt
 log "Tomcat installation and configuration complete."
 exec bash 
