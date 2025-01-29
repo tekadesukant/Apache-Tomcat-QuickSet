@@ -60,7 +60,7 @@ if [ "$OS" = "amzn" ]; then
     fi
     log "Installed Java $SUPPORTED_JAVA successfully."
 elif [ "$OS" = "rhel" ] || [ "$OS" = "centos" ]; then
-    log "RHEL or CentOS detected. Installing Java Development Kit..."
+    log "RHEL/CentOS detected. Installing Java Development Kit..."
     if [ "$SUPPORTED_JAVA" = "8" ]; then
         sudo yum install java-1.8.0-openjdk-devel -y
     elif [ "$SUPPORTED_JAVA" -ne "8" ]; then
@@ -71,7 +71,7 @@ elif [ "$OS" = "rhel" ] || [ "$OS" = "centos" ]; then
     fi
     log "Installed Java $SUPPORTED_JAVA successfully."
 elif [ "$OS" = "ubuntu" ] || [ "$OS" = "debian" ]; then
-    log "Ubuntu detected. Updating package lists..."
+    log "Ubuntu/Debian detected. Updating package lists..."
     sudo apt update -y
     sudo apt-get upgrade -y
     log "Installing Java Development Kit..."
