@@ -33,7 +33,7 @@ else
     exit 1
 fi
 
-sudo yum install wget -y
+sudo yum install wget -y || sudo apt-get update -y; sudo apt install wget -y
 
 # Fetch supported Java version for the current Tomcat version
 RELEASE_NOTES_URL="https://archive.apache.org/dist/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/RELEASE-NOTES"
@@ -70,10 +70,10 @@ elif [ "$OS" = "rhel" ] || [ "$OS" = "centos" ]; then
         exit 1
     fi
     log "Installed Java $SUPPORTED_JAVA successfully."
-elif [ "$OS" = "ubuntu" ]; then
+elif [ "$OS" = "ubuntu" ] || [ "$OS" = "debian" ]; then
     log "Ubuntu detected. Updating package lists..."
     sudo apt update
-    sudo apt-get update
+    sudo apt-get upgrade
     log "Installing Java Development Kit..."
     sudo add-apt-repository ppa:openjdk-r/ppa -y 
     sudo apt install openjdk-$SUPPORTED_JAVA-jdk -y
