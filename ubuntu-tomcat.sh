@@ -3,8 +3,8 @@
 # Note: This script has been tested on an Ubuntu server 22.04 LTS (HVM).
 
 # Fetched latest version 
-TOMCAT_VERSION=11.0.4
-# Previous Versions : 9.0.100, 10.1.36
+TOMCAT_VERSION=11.0.5
+# Previous Versions : 9.0.102, 10.1.36
 
 # Extracting major version from fetched version
 MAJOR_VERSION=$(echo "$TOMCAT_VERSION" | cut -d'.' -f1)
