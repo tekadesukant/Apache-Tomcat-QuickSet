@@ -3,8 +3,8 @@
 # Note: This script has been tested on an Amazon Linux 2 AMI (HVM).
 
 # Latest version successfully fetched 
-TOMCAT_VERSION=11.0.5
-# Previous Versions : 9.0.102, 10.1.40
+TOMCAT_VERSION=11.0.6
+# Previous Versions : 9.0.104, 10.1.40
 
 # Extracting major version from fetched version
 MAJOR_VERSION=$(echo "$TOMCAT_VERSION" | cut -d'.' -f1)
