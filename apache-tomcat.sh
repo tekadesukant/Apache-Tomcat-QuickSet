@@ -122,22 +122,13 @@ log "Starting Tomcat..."
 # Save Tomcat credentials
 log "Saving Tomcat credentials..."
 sudo tee /opt/tomcreds.txt > /dev/null <<EOF
-username:apachetomcat
-password:tomcat123
-tomcat path:/opt/tomcat
-portnumber:8080
+Username: apachetomcat
+Default password: tomcat123
+Default tomcat path: /opt/tomcat   #Entire Tomcat Files are Present here
+Default portnumber: 8080
+List all tomcat Commands: tomcat --help
 
-< Integrated Tomcat Commands For You >
-- Start Tomcat: tomcat --up 
-- Stop Tomcat: tomcat --down
-- Restart Tomcat: tomcat --restart
-- Remove Tomcat: tomcat --delete
-- Print Current PortNumber: tomcat --port
-- Change Tomcat PortNumber: tomcat --port-change
-- Change Tomcat Password: tomcat --passwd-change
-
-Follow me - linkedIn/in/tekade-sukant | Github.com/tekadesukant
-
+Follow me - linkedIn.com/in/tekadesukant | Github.com/tekadesukant
 EOF
 
 # Creating and Integrating tomcat commands script 
@@ -262,6 +253,8 @@ echo "alias tomcat='/usr/local/sbin/tomcat'" >> ~/.bashrc
 # Clean up
 log "Cleaning up..."
 rm -f apache-tomcat-$TOMCAT_VERSION.tar.gz
+
+cat /opt/tomcreds.txt
 
 log "Tomcat installation and configuration complete."
 exec bash 
