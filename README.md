@@ -21,17 +21,17 @@
 </div>
 
 ---
-
 # Documentation Contents
 
 1. [Introduction](#introduction)
 2. [What's Inside](#whats-inside)
-3. [Supported Platforms](#supported-platforms)
-4. [Additional Scripts](#additional-scripts)
-5. [How to Use](#how-to-use)
-6. [Integrated Commands](#integrated-commands)
-7. [Features](#features)
-8. [Support](#support)
+3. [Project Structure](#project-structure)
+4. [Supported Platforms](#supported-platforms)
+5. [Additional Scripts](#additional-scripts)
+6. [How to Use](#how-to-use)
+7. [Integrated Commands](#integrated-commands)
+8. [Features](#features)
+9. [Support](#support)
 
 ---
 
@@ -44,7 +44,20 @@ Welcome to **Apache-Tomcat-QuickSet**, your go-to solution for effortlessly inst
 - **Automated Script**: A robust script that handles the complete installation and setup of Tomcat. Simply execute it and watch your server come to life! 
 - **Weekly Updates**: The script is updated weekly. A job fetches the latest Tomcat version and updates the `apache-tomcat.sh` file for you. 
 - **User-Friendly**: Say goodbye to manual setups. Our script ensures a smooth and quick installation process. 
-- **Ready for Action**: Get straight to coding and deployment with Tomcat fully configured and ready to use! 
+- **Ready for Action**: Get straight to coding and deployment with Tomcat fully configured and ready to use!
+
+## Project Structure
+```
+Apache-Tomcat-QuickSet/
+├── apache-tomcat.sh 
+├── remove-tomcat.sh
+├── passwizard-tomcat.sh
+├── portuner-tomcat.sh
+├── README.md
+└── .github/
+    └── workflows/
+        └── fetch_tomcat_versions.yml
+```
 
 ## Supported Platforms
 
@@ -72,7 +85,7 @@ Our scripts support the following environments on AWS:
 
 2. **Run the desired script:**
    ```bash
-   sh apache-tomcat.sh       # For Amazon Linux and Ubuntu
+   sh apache-tomcat.sh       # For Amazon Linux, Ubuntu, Debian, CentOS Stream, and RHEL
    sh remove-tomcat.sh       # To remove Tomcat
    sh passwizard-tomcat.sh   # To change password
    sh portuner-tomcat.sh     # To change port number
