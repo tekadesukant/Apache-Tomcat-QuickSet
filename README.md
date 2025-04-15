@@ -5,7 +5,7 @@
 
 <h1 align="center">
   <span class="bold">Welcome aboard! Explore our realm</span>
-  <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="40px"/>
+  <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30px"/>
 </h1>
 
 <div id="badges" align="center">
@@ -35,16 +35,16 @@
 
 ---
 
-# Introduction <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="30">
+# Introduction <img src="https://media.giphy.com/media/WUlplcMpOCEmTGBtBW/giphy.gif" width="25">
 
 Welcome to **Apache-Tomcat-QuickSet**, your go-to solution for effortlessly installing and configuring Apache Tomcat. 
 
 ## What's Inside?
 
-- **Automated Script**: A robust script that handles the complete installation and setup of Tomcat. Simply execute it and watch your server come to life! 🛠️
-- **Weekly Updates**: The script is updated weekly. A job fetches the latest Tomcat version and updates the `apache-tomcat.sh` file for you. 🌟
-- **User-Friendly**: Say goodbye to manual setups. Our script ensures a smooth and quick installation process. ⏱️
-- **Ready for Action**: Get straight to coding and deployment with Tomcat fully configured and ready to use! 💻
+- **Automated Script**: A robust script that handles the complete installation and setup of Tomcat. Simply execute it and watch your server come to life! 
+- **Weekly Updates**: The script is updated weekly. A job fetches the latest Tomcat version and updates the `apache-tomcat.sh` file for you. 
+- **User-Friendly**: Say goodbye to manual setups. Our script ensures a smooth and quick installation process. 
+- **Ready for Action**: Get straight to coding and deployment with Tomcat fully configured and ready to use! 
 
 ## Supported Platforms
 
