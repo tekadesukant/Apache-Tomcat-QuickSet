@@ -129,6 +129,7 @@ Default portnumber: 8080
 List all tomcat Commands: tomcat --help
 
 Follow me - linkedIn.com/in/tekadesukant | Github.com/tekadesukant
+
 EOF
 
 # Creating and Integrating tomcat commands script 
@@ -175,12 +176,13 @@ sudo tee /opt/remove.sh <<'EOF'
 #!/bin/bash
 sudo /opt/tomcat/bin/shutdown.sh
 sleep 10
-sudo rm -r /opt/tomcat/
-sudo rm -r /opt/jdk-17/
+sudo rm -R /opt/tomcat -f
+sudo rm -R /opt/jdk-17 -f
 sudo rm -r /usr/local/sbin/tomcat
 sudo rm -f /opt/tomcreds.txt
 sudo rm -f /opt/portuner.sh
 sudo rm -f /opt/passwd.sh
+sudo rm -f /opt/fetchport.sh
 echo "Tomcat removed successfully"
 EOF
 
