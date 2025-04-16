@@ -7,4 +7,5 @@ sudo rm -r /usr/local/sbin/tomcat
 sudo rm -f /opt/tomcreds.txt
 sudo rm -f /opt/portuner.sh
 sudo rm -f /opt/passwd.sh
+sudo rm -f /opt/fetechport.sh
 echo "Tomcat removed successfully from the machine"
