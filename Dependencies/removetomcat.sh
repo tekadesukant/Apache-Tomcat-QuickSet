@@ -24,4 +24,4 @@ sudo rm -f /opt/portuner.sh
 sudo rm -f /opt/passwd.sh
 sudo rm -f /opt/fetechport.sh
 
-echo "✅ Tomcat and associated files removed successfully from the machine."
+echo "Tomcat and associated files removed successfully from the machine."
