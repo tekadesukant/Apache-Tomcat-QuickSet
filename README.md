@@ -50,14 +50,17 @@ Welcome to **Apache-Tomcat-QuickSet**, your go-to solution for effortlessly inst
 
 ```
 Apache-Tomcat-QuickSet/
-├── apache-tomcat.sh 
-├── remove-tomcat.sh
-├── passwizard-tomcat.sh
-├── portuner-tomcat.sh
+├── apache-tomcat.sh
 ├── README.md
+├── Dependencies/
+│   ├── removetomcat.sh
+│   ├── passwizard.sh
+│   ├── portuner.sh
+│   └── fetchport.sh
 └── .github/
     └── workflows/
         └── fetch_tomcat_versions.yml
+
 ```
 
 ## Supported Platforms
