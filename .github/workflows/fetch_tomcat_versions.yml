@@ -20,9 +20,10 @@ jobs:
           LATEST10=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-10/ | grep -oP 'v\d+\.\d+\.\d+.*?/' | sort -V | tail -n 1 | sed 's/\/$//')
           echo "Latest Tomcat Version: ${LATEST_VERSION}"
           TOMCAT_VERSION=$(echo "${LATEST_VERSION}" | cut -c 2-)
+          VLATEST9=$(echo "${LATEST9}" | cut -c 2-)
           # Update the shell script with the fetched values
-          sed -i "6 c TOMCAT_VERSION=${LATEST9}" apache-tomcat.sh
-          sed -i "7 c # Previous Versions : $(echo "${LATEST10}" | cut -c 2-), $(echo "${TOMCAT_VERSION}" | cut -c 2-)" apache-tomcat.sh
+          sed -i "6 c TOMCAT_VERSION=${VLATEST9}" apache-tomcat.sh
+          sed -i "7 c # Previous Versions : $(echo "${LATEST10}" | cut -c 2-), $(echo "${TOMCAT_VERSION}" )" apache-tomcat.sh
 
       - name: Commit updated Tomcat versions
         run: |
