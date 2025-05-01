@@ -68,17 +68,19 @@ Apache-Tomcat-QuickSet/
 Our scripts support the following OS platforms/cloud environments:
 
 - **Supported Linux Distributions**:
-  - `apache-tomcat.sh`: This script has been succesfully tested on an Ubuntu 22.04/24.04, RHEL 8/9, CentOS Stream 8/9, Amazon Linux 2/2023 and Debian 12. Testing on Debian 10/11 is currently in progress.
+  - `apache-tomcat.sh # This script has been succesfully tested on an Ubuntu 22.04/24.04, RHEL 8/9, CentOS Stream 8/9, Amazon Linux 2/2023 and Debian 12. Testing on Debian 10/11 is currently in progress.`
 
 ## Additional Scripts
 
 - **Remove Tomcat**:
-  - `remove-tomcat.sh`: Uninstalls Tomcat.
+  - `removetomcat.sh`: Uninstalls Tomcat.
 - **Change Password**:
-  - `passwizard-tomcat.sh`: Changes the Tomcat admin password.
+  - `passwizard.sh`: Changes the Tomcat admin password.
 - **Change Port Number**:
-  - `portuner-tomcat.sh`: Changes the Tomcat port number.
-
+  - `portuner.sh`: Changes the Tomcat port number.
+- **Fetch Port Number**:
+  - `fetchport.sh`: Fetch the Tomcat port number.
+    
 ## How to Use
 
 1. **Clone the repository:**
@@ -93,6 +95,7 @@ Our scripts support the following OS platforms/cloud environments:
    sh remove-tomcat.sh       # To remove Tomcat
    sh passwizard-tomcat.sh   # To change password
    sh portuner-tomcat.sh     # To change port number
+   sh fetchport.sh           # Fetch the Tomcat port number.
    ```
 
 ## Integrated Commands
