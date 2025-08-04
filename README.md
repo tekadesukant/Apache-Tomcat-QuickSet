@@ -91,11 +91,11 @@ Our scripts support the following OS platforms/cloud environments:
 
 2. **Run the desired script:**
    ```bash
-   sh apache-tomcat.sh       # For Amazon Linux, Ubuntu, Debian, CentOS Stream, and RHEL
-   sh remove-tomcat.sh       # To remove Tomcat
-   sh passwizard-tomcat.sh   # To change password
-   sh portuner-tomcat.sh     # To change port number
-   sh fetchport.sh           # Fetch the Tomcat port number.
+   sh apache-tomcat.sh                   # For Amazon Linux, Ubuntu, Debian, CentOS Stream, and RHEL
+   sh Dependencies/removetomcat.sh       # To remove Tomcat
+   sh Dependencies/passwizard.sh         # To change password
+   sh Dependencies/portuner.sh           # To change port number
+   sh Dependencies/fetchport.sh          # Fetch the Tomcat port number.
    ```
 
 ## Integrated Commands
