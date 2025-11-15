@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Note: This script has been tested on an Ubuntu 22.04/24.04, RHEL 8/9, Debian 12 and Amazon Linux 2/2023. Testing on Debian 10/11, CentOS Stream 8/9 instance is currently in progress.
+# Note: This script has been succesfully tested on an Ubuntu 22.04/24.04, RHEL 8/9, CentOS Stream 8/9, Amazon Linux 2/2023 and Debian 12. Testing on Debian 10/11 is currently in progress.
 
 # Latest version successfully fetched 
 TOMCAT_VERSION=9.0.112
