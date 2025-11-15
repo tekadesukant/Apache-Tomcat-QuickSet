@@ -33,7 +33,7 @@ else
     exit 1
 fi
 
-sudo yum install wget -y || sudo apt-get update -y; sudo apt install wget -y
+sudo yum install wget -y || sudo apt-get update -y; sudo apt install wget -y || true
 
 # Fetch supported Java version for the current Tomcat version
 RELEASE_NOTES_URL="https://archive.apache.org/dist/tomcat/tomcat-$MAJOR_VERSION/v$TOMCAT_VERSION/RELEASE-NOTES"
