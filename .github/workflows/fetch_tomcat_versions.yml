@@ -2,7 +2,7 @@ name: Fetch Tomcat Versions
 
 on:
   schedule:
-    - cron: '0 0 */2 * *' # Runs at midnight on every 2 days.
+    - cron: '0 0 * * 0' # Every Sunday at 12 AM
 
 jobs:
   fetch_tomcat_versions:
@@ -18,7 +18,6 @@ jobs:
           LATEST_VERSION=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-${MAJOR_VERSION}/ | grep -oP 'v\d+\.\d+\.\d+.*?/' | sort -V | tail -n 1 | sed 's/\/$//')
           LATEST9=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-9/ | grep -oP 'v\d+\.\d+\.\d+.*?/' | sort -V | tail -n 1 | sed 's/\/$//')
           LATEST10=$(curl -s https://dlcdn.apache.org/tomcat/tomcat-10/ | grep -oP 'v\d+\.\d+\.\d+.*?/' | sort -V | tail -n 1 | sed 's/\/$//')
-          echo "Latest Tomcat Version: ${LATEST_VERSION}"
           TOMCAT_VERSION=$(echo "${LATEST_VERSION}" | cut -c 2-)
           VLATEST9=$(echo "${LATEST9}" | cut -c 2-)
           # Update the shell script with the fetched values
